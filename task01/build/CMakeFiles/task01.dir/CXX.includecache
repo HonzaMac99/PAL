@@ -9,6 +9,10 @@
 /home/honzamac/PAL/task01/task01.cpp
 iostream
 -
+fstream
+-
+sstream
+-
 task01.hpp
 /home/honzamac/PAL/task01/task01.hpp
 

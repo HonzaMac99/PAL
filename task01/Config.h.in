@@ -1,4 +1,0 @@
-// the configured options and settings for Task01
-#define Task01_VERSION_MAJOR @Task01_VERSION_MAJOR@
-#define Task01_VERSION_MINOR @Task01_VERSION_MINOR@
-
