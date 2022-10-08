@@ -24,7 +24,11 @@ int* get_ints(std::string file_line) {
 int main(int argc, char* argv[])
 {
   // Read from the text file
-  std::fstream MyReadFile("/home/honzamac/PAL/task01/datapub/pub01.in");
+  std::string file_name = "/home/honzamac/PAL/task01/datapub/pub01.in";
+  if (argc > 1) 
+    file_name = argv[1];
+
+  std::fstream MyReadFile(file_name);
   std::string fileLine;
    
   getline(MyReadFile, fileLine);
