@@ -36,9 +36,12 @@ int main(int argc, char* argv[])
   std::cout << params[0] <<" "<< params[1] <<" "<< params[2] << std::endl;
   std::cout << std::endl;
 
-  int T = params[0];
-  int D = params[1];
-  int R = params[2];
+  int T = params[0];  // T <= 250 k
+  int D = params[1];  // D <=   2 k
+  int R = params[2];  // R <= 450 k  
+  // 0 < Edge_cost <= 250
+
+  int* closed_nodes = new int(T);
   
   while (getline(MyReadFile, fileLine)) {
     // Output the text from the file
