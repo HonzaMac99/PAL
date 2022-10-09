@@ -7,7 +7,6 @@ int* get_ints(std::string file_line) {
   std::stringstream ss;
   std::string word;
   int *number_array = new int(3); 
-  // int found;
 
   ss << file_line;
 
