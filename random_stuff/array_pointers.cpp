@@ -21,6 +21,9 @@ int main()
     }
     cout << "address of new_array[" << 3 << "]: " << (int*)new_array + 3 << endl;
     cout << new_array << endl;
+    
+    delete [] new_array;
+    new_array = NULL;
    
     return 0;
 }
