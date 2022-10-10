@@ -11,6 +11,13 @@ int main()
     for(int i = 0; i <= 10; i++) {
         numbers.push_back(i);
     }
+    
+    // replace 5 with 55
+    numbers.insert(numbers.begin() + 5, 55);
+    numbers.erase(numbers.begin() + 5);
+    
+    //pop element from the end
+    numbers.pop_back();
 
     // print the contents (values) of the array
     for(int number : numbers)
@@ -18,12 +25,12 @@ int main()
     cout << endl << endl;
         
     // it ... iterator  
-    for(auto it = numbers.begin(); it != numbers.end(); it++) {
-        cout << *it << endl;  // value of the element of the iterator
-        cout << &it << endl;  // adress of the iterator
-        cout << &(*it) << endl;  // adress of the element
-    }
-    cout << endl;
+    // for(auto it = numbers.begin(); it != numbers.end(); it++) {
+    //     cout << *it << endl;  // value of the element of the iterator
+    //     cout << &it << endl;  // adress of the iterator
+    //     cout << &(*it) << endl;  // adress of the element
+    // }
+    // cout << endl;
     // use .cbegin() and .cend() for constant iterators
     //  --> the values will be then unchangable in the loop
     
