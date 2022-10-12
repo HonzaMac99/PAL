@@ -1,0 +1,5 @@
+/home/honzamac/PAL/random_stuff/build/CMakeFiles/rebuild_cache.dir
+/home/honzamac/PAL/random_stuff/build/CMakeFiles/edit_cache.dir
+/home/honzamac/PAL/random_stuff/build/CMakeFiles/tree.dir
+/home/honzamac/PAL/random_stuff/build/CMakeFiles/vector.dir
+/home/honzamac/PAL/random_stuff/build/CMakeFiles/pointers.dir

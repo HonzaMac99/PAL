@@ -10,3 +10,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # add the executable
 add_executable(pointers array_pointers.cpp)
 add_executable(vector array_vector.cpp)
+add_executable(tree tree.cpp)
