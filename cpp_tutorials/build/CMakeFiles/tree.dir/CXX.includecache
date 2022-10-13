@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/honzamac/PAL/random_stuff/tree.cpp
+/home/honzamac/PAL/cpp_tutorials/tree.cpp
 iostream
 -
 vector

@@ -1,5 +1,6 @@
-/home/honzamac/PAL/random_stuff/build/CMakeFiles/rebuild_cache.dir
-/home/honzamac/PAL/random_stuff/build/CMakeFiles/edit_cache.dir
-/home/honzamac/PAL/random_stuff/build/CMakeFiles/tree.dir
-/home/honzamac/PAL/random_stuff/build/CMakeFiles/vector.dir
-/home/honzamac/PAL/random_stuff/build/CMakeFiles/pointers.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/rebuild_cache.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/lambda.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/edit_cache.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/tree.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/vector.dir
+/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/array_pointers.dir

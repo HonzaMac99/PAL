@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/honzamac/PAL/random_stuff/array_pointers.cpp" "/home/honzamac/PAL/random_stuff/build/CMakeFiles/pointers.dir/array_pointers.cpp.o"
+  "/home/honzamac/PAL/cpp_tutorials/array_pointers.cpp" "/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/pointers.dir/array_pointers.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

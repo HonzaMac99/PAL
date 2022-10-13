@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/honzamac/PAL/random_stuff/tree.cpp" "/home/honzamac/PAL/random_stuff/build/CMakeFiles/tree.dir/tree.cpp.o"
+  "/home/honzamac/PAL/cpp_tutorials/tree.cpp" "/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/tree.dir/tree.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

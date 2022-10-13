@@ -22,7 +22,7 @@ int main()
     // print the contents (values) of the array
     for(int number : numbers)
         cout << number << " ";
-    cout << endl << endl;
+    cout  << endl;
         
     // it ... iterator  
     // for(auto it = numbers.begin(); it != numbers.end(); it++) {

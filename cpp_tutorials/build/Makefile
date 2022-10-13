@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/honzamac/PAL/random_stuff
+CMAKE_SOURCE_DIR = /home/honzamac/PAL/cpp_tutorials
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/honzamac/PAL/random_stuff/build
+CMAKE_BINARY_DIR = /home/honzamac/PAL/cpp_tutorials/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles /home/honzamac/PAL/random_stuff/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named lambda
+
+# Build rule for target.
+lambda: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lambda
+.PHONY : lambda
+
+# fast build rule for target.
+lambda/fast:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/build
+.PHONY : lambda/fast
+
+#=============================================================================
 # Target rules for targets named tree
 
 # Build rule for target.
@@ -137,17 +150,17 @@ vector/fast:
 .PHONY : vector/fast
 
 #=============================================================================
-# Target rules for targets named pointers
+# Target rules for targets named array_pointers
 
 # Build rule for target.
-pointers: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pointers
-.PHONY : pointers
+array_pointers: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 array_pointers
+.PHONY : array_pointers
 
 # fast build rule for target.
-pointers/fast:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/build
-.PHONY : pointers/fast
+array_pointers/fast:
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/build
+.PHONY : array_pointers/fast
 
 array_pointers.o: array_pointers.cpp.o
 
@@ -155,7 +168,7 @@ array_pointers.o: array_pointers.cpp.o
 
 # target to build an object file
 array_pointers.cpp.o:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/array_pointers.cpp.o
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/array_pointers.cpp.o
 .PHONY : array_pointers.cpp.o
 
 array_pointers.i: array_pointers.cpp.i
@@ -164,7 +177,7 @@ array_pointers.i: array_pointers.cpp.i
 
 # target to preprocess a source file
 array_pointers.cpp.i:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/array_pointers.cpp.i
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/array_pointers.cpp.i
 .PHONY : array_pointers.cpp.i
 
 array_pointers.s: array_pointers.cpp.s
@@ -173,35 +186,35 @@ array_pointers.s: array_pointers.cpp.s
 
 # target to generate assembly for a file
 array_pointers.cpp.s:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/array_pointers.cpp.s
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/array_pointers.cpp.s
 .PHONY : array_pointers.cpp.s
 
-array_vector.o: array_vector.cpp.o
+lambda.o: lambda.cpp.o
 
-.PHONY : array_vector.o
+.PHONY : lambda.o
 
 # target to build an object file
-array_vector.cpp.o:
-	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/array_vector.cpp.o
-.PHONY : array_vector.cpp.o
+lambda.cpp.o:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/lambda.cpp.o
+.PHONY : lambda.cpp.o
 
-array_vector.i: array_vector.cpp.i
+lambda.i: lambda.cpp.i
 
-.PHONY : array_vector.i
+.PHONY : lambda.i
 
 # target to preprocess a source file
-array_vector.cpp.i:
-	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/array_vector.cpp.i
-.PHONY : array_vector.cpp.i
+lambda.cpp.i:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/lambda.cpp.i
+.PHONY : lambda.cpp.i
 
-array_vector.s: array_vector.cpp.s
+lambda.s: lambda.cpp.s
 
-.PHONY : array_vector.s
+.PHONY : lambda.s
 
 # target to generate assembly for a file
-array_vector.cpp.s:
-	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/array_vector.cpp.s
-.PHONY : array_vector.cpp.s
+lambda.cpp.s:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/lambda.cpp.s
+.PHONY : lambda.cpp.s
 
 tree.o: tree.cpp.o
 
@@ -230,6 +243,33 @@ tree.cpp.s:
 	$(MAKE) -f CMakeFiles/tree.dir/build.make CMakeFiles/tree.dir/tree.cpp.s
 .PHONY : tree.cpp.s
 
+vector.o: vector.cpp.o
+
+.PHONY : vector.o
+
+# target to build an object file
+vector.cpp.o:
+	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/vector.cpp.o
+.PHONY : vector.cpp.o
+
+vector.i: vector.cpp.i
+
+.PHONY : vector.i
+
+# target to preprocess a source file
+vector.cpp.i:
+	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/vector.cpp.i
+.PHONY : vector.cpp.i
+
+vector.s: vector.cpp.s
+
+.PHONY : vector.s
+
+# target to generate assembly for a file
+vector.cpp.s:
+	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/vector.cpp.s
+.PHONY : vector.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -237,19 +277,23 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... lambda"
 	@echo "... edit_cache"
 	@echo "... tree"
 	@echo "... vector"
-	@echo "... pointers"
+	@echo "... array_pointers"
 	@echo "... array_pointers.o"
 	@echo "... array_pointers.i"
 	@echo "... array_pointers.s"
-	@echo "... array_vector.o"
-	@echo "... array_vector.i"
-	@echo "... array_vector.s"
+	@echo "... lambda.o"
+	@echo "... lambda.i"
+	@echo "... lambda.s"
 	@echo "... tree.o"
 	@echo "... tree.i"
 	@echo "... tree.s"
+	@echo "... vector.o"
+	@echo "... vector.i"
+	@echo "... vector.s"
 .PHONY : help
 
 

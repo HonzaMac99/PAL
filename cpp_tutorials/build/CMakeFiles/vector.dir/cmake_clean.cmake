@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/vector.dir/array_vector.cpp.o"
+  "CMakeFiles/vector.dir/vector.cpp.o"
   "vector"
   "vector.pdb"
 )

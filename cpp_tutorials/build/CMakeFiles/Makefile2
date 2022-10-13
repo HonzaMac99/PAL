@@ -44,18 +44,19 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/honzamac/PAL/random_stuff
+CMAKE_SOURCE_DIR = /home/honzamac/PAL/cpp_tutorials
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/honzamac/PAL/random_stuff/build
+CMAKE_BINARY_DIR = /home/honzamac/PAL/cpp_tutorials/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/lambda.dir/all
 all: CMakeFiles/tree.dir/all
 all: CMakeFiles/vector.dir/all
-all: CMakeFiles/pointers.dir/all
+all: CMakeFiles/array_pointers.dir/all
 
 .PHONY : all
 
@@ -65,11 +66,39 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/lambda.dir/clean
 clean: CMakeFiles/tree.dir/clean
 clean: CMakeFiles/vector.dir/clean
-clean: CMakeFiles/pointers.dir/clean
+clean: CMakeFiles/array_pointers.dir/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/lambda.dir
+
+# All Build rule for target.
+CMakeFiles/lambda.dir/all:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/depend
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles --progress-num=3,4 "Built target lambda"
+.PHONY : CMakeFiles/lambda.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/lambda.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/lambda.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 0
+.PHONY : CMakeFiles/lambda.dir/rule
+
+# Convenience name for target.
+lambda: CMakeFiles/lambda.dir/rule
+
+.PHONY : lambda
+
+# clean rule for target.
+CMakeFiles/lambda.dir/clean:
+	$(MAKE) -f CMakeFiles/lambda.dir/build.make CMakeFiles/lambda.dir/clean
+.PHONY : CMakeFiles/lambda.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/tree.dir
@@ -78,14 +107,14 @@ clean: CMakeFiles/pointers.dir/clean
 CMakeFiles/tree.dir/all:
 	$(MAKE) -f CMakeFiles/tree.dir/build.make CMakeFiles/tree.dir/depend
 	$(MAKE) -f CMakeFiles/tree.dir/build.make CMakeFiles/tree.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/random_stuff/build/CMakeFiles --progress-num=3,4 "Built target tree"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles --progress-num=5,6 "Built target tree"
 .PHONY : CMakeFiles/tree.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/tree.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/tree.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 0
 .PHONY : CMakeFiles/tree.dir/rule
 
 # Convenience name for target.
@@ -105,14 +134,14 @@ CMakeFiles/tree.dir/clean:
 CMakeFiles/vector.dir/all:
 	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/depend
 	$(MAKE) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/random_stuff/build/CMakeFiles --progress-num=5,6 "Built target vector"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles --progress-num=7,8 "Built target vector"
 .PHONY : CMakeFiles/vector.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/vector.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/vector.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 0
 .PHONY : CMakeFiles/vector.dir/rule
 
 # Convenience name for target.
@@ -126,31 +155,31 @@ CMakeFiles/vector.dir/clean:
 .PHONY : CMakeFiles/vector.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/pointers.dir
+# Target rules for target CMakeFiles/array_pointers.dir
 
 # All Build rule for target.
-CMakeFiles/pointers.dir/all:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/depend
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/random_stuff/build/CMakeFiles --progress-num=1,2 "Built target pointers"
-.PHONY : CMakeFiles/pointers.dir/all
+CMakeFiles/array_pointers.dir/all:
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/depend
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/honzamac/PAL/cpp_tutorials/build/CMakeFiles --progress-num=1,2 "Built target array_pointers"
+.PHONY : CMakeFiles/array_pointers.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/pointers.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/pointers.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/random_stuff/build/CMakeFiles 0
-.PHONY : CMakeFiles/pointers.dir/rule
+CMakeFiles/array_pointers.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/array_pointers.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/honzamac/PAL/cpp_tutorials/build/CMakeFiles 0
+.PHONY : CMakeFiles/array_pointers.dir/rule
 
 # Convenience name for target.
-pointers: CMakeFiles/pointers.dir/rule
+array_pointers: CMakeFiles/array_pointers.dir/rule
 
-.PHONY : pointers
+.PHONY : array_pointers
 
 # clean rule for target.
-CMakeFiles/pointers.dir/clean:
-	$(MAKE) -f CMakeFiles/pointers.dir/build.make CMakeFiles/pointers.dir/clean
-.PHONY : CMakeFiles/pointers.dir/clean
+CMakeFiles/array_pointers.dir/clean:
+	$(MAKE) -f CMakeFiles/array_pointers.dir/build.make CMakeFiles/array_pointers.dir/clean
+.PHONY : CMakeFiles/array_pointers.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
