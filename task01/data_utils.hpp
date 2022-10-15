@@ -1,3 +1,6 @@
+#ifndef DATA_LIB
+#define DATA_LIB
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -10,6 +13,9 @@ int** get_data(std::string fname, int* towns,
                 int* district_towns, int* roads);
 void swap_arrays(int* array1, int* array2);
 int** sort_array(int** in_array, int array_len);
+int* or_arrays(int* array1, int* array2);
+int* copy_array(int* in_array, int len);
+int* zero_array(int* array1, int len);
 
 
 void print_ints(int* ints) {
@@ -108,3 +114,34 @@ int** sort_array(int** in_array, int array_len) {
 }
 
 
+// perform or on every element of the arrays
+int* or_arrays(int* array1, int* array2, int len) {
+  int* or_array = new int[len];
+
+  for(int i = 0; i < len; i++) {
+    or_array[i] = array1[i] | array2[i];
+  }
+
+  return or_array;
+}
+
+
+// TODO: check the memory management if necessary
+int* copy_array(int* in_array, int len) {
+  int* out_array = new int[len];
+
+  for(int i = 0; i < len; i++ )
+    out_array[i] = in_array[i];  
+
+  return out_array;
+}
+
+
+int* zero_array(int* array1, int len) {
+  for(int i = 0; i < len; i++)
+    array1[i] = 0;
+
+  return array1;
+}
+
+#endif

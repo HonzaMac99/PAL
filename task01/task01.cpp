@@ -1,26 +1,7 @@
 #include <iostream>
 #include "task01.hpp"
 #include "data_utils.hpp"
-
-#define MAX_T 250000
-#define MAX_D 2000
-#define MAX_R 450000
-
-#define EDGE_COST_MIN 1
-#define EDGE_COST_MAX 250 
-
-// perform BFS on the cities, define districts 
-// and their distances to their district towns
-int* set_districts(int **data, int towns, int districts, int roads) {
-  int* town_districts = new int[towns];
-  for(int i = 1; i <= districts; i++) {
-      
-  }
-  
-
-
-  return town_districts;
-}
+#include "print_utils.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -31,11 +12,14 @@ int main(int argc, char* argv[])
 
   int n_towns, n_dtowns, n_roads; 
   int **data = get_data(file_name, &n_towns, &n_dtowns, &n_roads);
-  int *town_districts = new int[n_towns];
+  int* town_districts = zero_array(new int[n_towns+1], n_towns+1);
+  int* town_distances = zero_array(new int[n_towns+1], n_towns+1);
+  set_town_info(data, town_districts, town_distances, n_towns, n_dtowns, n_roads);
+
+  print_town_info(town_districts, town_distances, n_towns); 
 
   // sort array by the cost of the roads
   data = sort_array(data, n_roads);
-
 
   return 0;
 }

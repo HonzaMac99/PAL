@@ -9,4 +9,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # add the executable
 add_executable(task01 task01.cpp)
+add_executable(test test.cpp)
 
