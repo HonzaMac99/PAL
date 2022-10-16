@@ -52,7 +52,12 @@ int main(int argc, char* argv[]) {
   root->childs[2]->parent = root;
 
   print_node(root);
-  print_node(child2);
+  Node* last_child = root->childs.back();
+  root->childs.pop_back();
+  print_node(root);
+  print_node(last_child);
+  //print_node(root);
+  //print_node(child2);
   
   return 0;
 }

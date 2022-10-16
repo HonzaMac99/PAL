@@ -5,14 +5,14 @@
 #include <fstream>
 #include <sstream>
 
-#define PRINT_INFO 0 
+#define PRINT_INFO 1 
 
 void print_ints(int* ints);
 int* get_ints(std::string file_line);
 int** get_data(std::string fname, int* towns, 
                 int* district_towns, int* roads);
 void swap_arrays(int* array1, int* array2);
-int** sort_array(int** in_array, int array_len);
+void sort_array(int** in_array, int array_len);
 int* or_arrays(int* array1, int* array2);
 int* copy_array(int* in_array, int len);
 int* zero_array(int* array1, int len);
@@ -78,11 +78,11 @@ int** get_data(std::string fname, int* towns, int* districts, int* roads) {
 
 
 void swap_arrays(int* array1, int* array2) {
-  int* tmp_array = new int[3];
+  int tmp;
   for(int i = 0; i < 3; i++) {
-    tmp_array[i] = array1[i];
+    tmp = array1[i];
     array1[i] = array2[i];
-    array2[i] = tmp_array[i];
+    array2[i] = tmp;
   }
 }
 
@@ -90,17 +90,18 @@ void swap_arrays(int* array1, int* array2) {
 // selection sort (slow)
 // TODO: quick/merge/heap sort??
 // sort array by the cost of the 3rd element 
-int** sort_array(int** in_array, int array_len) {
+void sort_array(int** in_array, int array_len) {
   for(int i = 0; i < array_len; i++) {
     int arr_rest_min = in_array[i][2]; 
     int min_idx = i;
-    for(int j = i; j < array_len; j++) {
+    for(int j = i+1; j < array_len; j++) {
       if (in_array[j][2] < arr_rest_min) {
         arr_rest_min = in_array[j][2];
         min_idx = j;
       }
     }
-    swap_arrays(in_array[i], in_array[min_idx]);
+    if (min_idx != i)
+      swap_arrays(in_array[i], in_array[min_idx]);
   }
 
 #if PRINT_INFO
@@ -109,8 +110,6 @@ int** sort_array(int** in_array, int array_len) {
   }
   std::cout << std::endl;
 #endif
-
-  return in_array;
 }
 
 
