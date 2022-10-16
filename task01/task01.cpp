@@ -15,8 +15,7 @@ int main(int argc, char* argv[])
   int* town_districts = zero_array(new int[n_towns+1], n_towns+1);
   int* town_distances = zero_array(new int[n_towns+1], n_towns+1);
 
-  std::cout << "debug: " << std::endl;
-  print_ints(data[7]);
+  std::cout << std::endl;
   // sort array by the cost of the roads
   sort_array(data, n_roads);
   

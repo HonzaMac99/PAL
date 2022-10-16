@@ -71,8 +71,6 @@ int** get_data(std::string fname, int* towns, int* districts, int* roads) {
 #endif
 
   MyReadFile.close();
-  delete [] num_array;
-
   return data;
 }
 
@@ -105,9 +103,8 @@ void sort_array(int** in_array, int array_len) {
   }
 
 #if PRINT_INFO
-  for(int i = 0; i < array_len; i++) {
+  for(int i = 0; i < array_len; i++) 
     print_ints(in_array[i]);
-  }
   std::cout << std::endl;
 #endif
 }
