@@ -4,33 +4,29 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include "print_utils.hpp"
 
-#define PRINT_INFO 1 
+#define DATA_INFO 0
 
-void print_ints(int* ints);
 int* get_ints(std::string file_line);
-int** get_data(std::string fname, int* towns, 
+int** get_stdin_data(int* towns, int* districts, int* roads);
+int** get_file_data(std::string fname, int* towns, 
                 int* district_towns, int* roads);
 void swap_arrays(int* array1, int* array2);
 void sort_array(int** in_array, int array_len);
-int* or_arrays(int* array1, int* array2);
+void or_arrays(int* array1, int* array2);
 int* copy_array(int* in_array, int len);
 int* zero_array(int* array1, int len);
 
 
-void print_ints(int* ints) {
-  std::cout << ints[0] <<" "<< ints[1] <<" "<< ints[2] << std::endl;
-}
-
-
 int* get_ints(std::string file_line) {
   std::stringstream ss;
-  std::string word;
   int *number_array = new int[3]; 
 
   ss << file_line;
 
-  /* Check all words in the line for any ints */
+  // Check all words in the line for any ints 
   int i = 0;
   while(!ss.eof()) {
     ss >> number_array[i];
@@ -40,9 +36,38 @@ int* get_ints(std::string file_line) {
 }
 
 
+// stores data from a stdin into a 2D array
+// also stores values about the data 
+int** get_stdin_data(int* towns, int* districts, int* roads) {
+
+  std::cin >> *towns; 
+  std::cin >> *districts; 
+  std::cin >> *roads;
+
+  int **data = new int *[*roads];
+
+  for(int i = 0; i < *roads; i++) { 
+    int *num_array = new int[3];
+    for(int j = 0; j < 3; j++) 
+      std::cin >> num_array[j]; 
+    data[i] = num_array;
+  }
+
+#if DATA_INFO 
+  std::cout << std::endl;
+  for(int i = 0; i < *roads; i++) {
+    print_ints(data[i]);
+  }
+  std::cout << std::endl;
+#endif
+
+  return data;
+}
+
+
 // stores data from a file into a 2D array
 // also stores values about the data 
-int** get_data(std::string fname, int* towns, int* districts, int* roads) {
+int** get_file_data(std::string fname, int* towns, int* districts, int* roads) {
 
   std::fstream MyReadFile(fname);
   std::string fileLine;
@@ -55,7 +80,7 @@ int** get_data(std::string fname, int* towns, int* districts, int* roads) {
   *roads = params[2];
   
   int **data = new int *[*roads];
-  int *num_array = new int[3];
+  int *num_array;
 
   int i = 0;
   while (getline(MyReadFile, fileLine)) {
@@ -63,7 +88,7 @@ int** get_data(std::string fname, int* towns, int* districts, int* roads) {
     data[i++] = num_array;
   }
 
-#if PRINT_INFO
+#if DATA_INFO
   for(int i = 0; i < *roads; i++) {
     print_ints(data[i]);
   }
@@ -71,6 +96,8 @@ int** get_data(std::string fname, int* towns, int* districts, int* roads) {
 #endif
 
   MyReadFile.close();
+  delete [] params;
+
   return data;
 }
 
@@ -85,40 +112,68 @@ void swap_arrays(int* array1, int* array2) {
 }
 
 
-// selection sort (slow)
-// TODO: quick/merge/heap sort??
-// sort array by the cost of the 3rd element 
-void sort_array(int** in_array, int array_len) {
-  for(int i = 0; i < array_len; i++) {
-    int arr_rest_min = in_array[i][2]; 
-    int min_idx = i;
-    for(int j = i+1; j < array_len; j++) {
-      if (in_array[j][2] < arr_rest_min) {
-        arr_rest_min = in_array[j][2];
-        min_idx = j;
-      }
+
+
+// part in the quick sort algorithm
+int partition(int** arr, int start, int end)
+{
+ 
+    int pivot = arr[start][2];
+ 
+    int count_var = 0;
+    for (int i = start + 1; i <= end; i++) {
+        if (arr[i][2] <= pivot)
+            count_var++;
     }
-    if (min_idx != i)
-      swap_arrays(in_array[i], in_array[min_idx]);
-  }
-
-#if PRINT_INFO
-  for(int i = 0; i < array_len; i++) 
-    print_ints(in_array[i]);
-  std::cout << std::endl;
-#endif
+ 
+    // Giving pivot element its correct position
+    int pivotIndex = start + count_var;
+    swap_arrays(arr[pivotIndex], arr[start]);
+ 
+    // Sorting left and right parts of the pivot element
+    int i = start, j = end;
+ 
+    while (i < pivotIndex && j > pivotIndex) {
+ 
+        while (arr[i][2] <= pivot) {
+            i++;
+        }
+ 
+        while (arr[j][2] > pivot) {
+            j--;
+        }
+ 
+        if (i < pivotIndex && j > pivotIndex) {
+            swap_arrays(arr[i++], arr[j--]);
+        }
+    }
+ 
+    return pivotIndex;
 }
+ 
 
+// quick sort (fast)
+void quickSort(int** arr, int start, int end)
+{
+ 
+    // base case
+    if (start >= end)
+        return;
+ 
+    // partitioning the array
+    int p = partition(arr, start, end);
 
-// perform or on every element of the arrays
-int* or_arrays(int* array1, int* array2, int len) {
-  int* or_array = new int[len];
+    // Sorting the left part
+    quickSort(arr, start, p - 1);
+ 
+    // Sorting the right part
+    quickSort(arr, p + 1, end);
 
-  for(int i = 0; i < len; i++) {
-    or_array[i] = array1[i] | array2[i];
-  }
-
-  return or_array;
+#if DATA_INFO
+    for(int i = 0; i < end; i++) 
+        print_ints(arr[i]);
+    std::cout << std::endl;
+#endif
 }
 
 
@@ -133,11 +188,18 @@ int* copy_array(int* in_array, int len) {
 }
 
 
-int* zero_array(int* array1, int len) {
-  for(int i = 0; i < len; i++)
-    array1[i] = 0;
-
-  return array1;
+// perform or on every element of the arrays
+void or_arrays(int* array1, int* array2, int len) {
+  for(int i = 0; i < len; i++) {
+    array1[i] = array1[i] | array2[i];
+  }
 }
 
+
+int* zero_array(int* array1, int len) {
+  std::fill(array1, array1+len, 0);
+  return array1;
+}
 #endif
+
+
