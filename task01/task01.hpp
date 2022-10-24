@@ -2,178 +2,151 @@
 #define MAIN_LIB
 
 #include <iostream>
+#include <vector>
+#include <queue>
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
 #define PRINT_INFO 0
 
-int get_glob_mst_cost(int** data, int* town_districts, 
-                  int towns, int districts, int roads);
-int get_mst_cost(int** data, int* town_districts, 
-                  int towns, int districts, int roads);
-int* process_towns(int **data, int* town_districts, int* town_distances,
-                   int towns, int districts, int roads);
+int* bosses;
+int* ranks;
+void UF_init(int n);
+void UF_union(int rootA, int rootB);
+int UF_find(int a); 
+void UF_free();
+
+int get_glob_mst_cost(int** data, int* town_districts, int distr_towns, int roads);
+int get_mst_cost(int** data, int* town_districts, int towns, int roads);
+void process_towns(int **data, int* town_districts, int towns, int districts, int roads);
 
 
+void UF_init(int n) {
+  bosses = new int [n];
+  ranks = new int [n];
+
+  for(int i = 0; i < n; i++ ) {
+    bosses[i] = i; // everybody's their own boss
+    ranks[i] = 0; // initial rank is 0
+  }
+}
+
+void UF_union( int rootA, int rootB ) {
+  if( ranks[rootB] > ranks[rootA] )
+    bosses[rootA] = rootB;
+  else {
+    bosses[rootB] = rootA;
+    if( ranks[rootB] == ranks[rootA] ) // change rank?
+      ranks[rootA]++;
+  }
+}
+
+int UF_find(int a) {
+  int parent = bosses[a];
+  if ( parent != a )
+    bosses[a] = UF_find(parent); // path compression
+  return bosses[a];
+}
+
+void UF_free() {
+  delete [] bosses;
+  delete [] ranks;
+}
+
+
+// Kruskal's algorithm for global mst (faster)
 // get a value of a minimal spanning tree cost on a global scale 
-int get_glob_mst_cost(int** data, int* town_districts, int towns, 
-                    int districts, int roads) {
+int get_glob_mst_cost(int** data, int* town_districts, int distr_towns, int roads) {
 
-  int* connected_distrs = zero_array(new int[districts+1], districts+1);
-  connected_distrs[1] = 1;
-  int towns_to_expand = 1;
+  UF_init(distr_towns+1);
   int min_cost = 0;
-  while(towns_to_expand > 0) {
-    towns_to_expand = 0;
-    for(int j = 0; j < roads; j++) {
-      int town1_id = data[j][0];
-      int town1_distr = town_districts[town1_id];
-      int town2_id = data[j][1];
-      int town2_distr = town_districts[town2_id];
-      int road_cost = data[j][2];
-      
-      if(connected_distrs[town1_distr] xor connected_distrs[town2_distr]) 
-      {
-        int new_district = (connected_distrs[town1_distr]) 
-                              ? town2_distr : town1_distr;
-        connected_distrs[new_district] = 1;
+
+  for(int j = 0; j < roads; j++) {
+    int town1_distr = town_districts[data[j][0]];
+    int town2_distr = town_districts[data[j][1]];
+    int road_cost = data[j][2];
+
+    if(town1_distr != town2_distr) {
+      int distr1_root = UF_find(town1_distr);
+      int distr2_root = UF_find(town2_distr);
+
+      if (distr1_root != distr2_root) {
+        UF_union(distr1_root, distr2_root);
         min_cost += road_cost;
-      #if PRINT_INFO 
-        print_ints(data[j]);
-        std::cout << "connecting " << town1_distr <<
-                           " and " << town2_distr;
-        std::cout << " --> new: " << new_district << std::endl;
-      #endif
-        towns_to_expand++;
-        break;
       }
     }
   }
-  delete [] connected_distrs; 
+  UF_free();
 
   return min_cost;
 }
 
 
+// Kruskal's algorithm for mst (faster)
 // get the sum of a minimal spanning tree cost for each district
-int get_mst_cost(int** data, int* town_districts, int towns, 
-                    int districts, int roads) {
+int get_mst_cost(int** data, int* town_districts, int towns, int roads) {
+
+  UF_init(towns+1);
   int min_cost = 0;
-  int towns_to_expand;
-  int* frontier = new int[towns+1];
 
-  for(int i = 1; i <= districts; i++) {
-    // std::cout << "District " << i << ":" << std::endl;
-    frontier = zero_array(frontier, towns+1);
-    frontier[i] = 1;
-    towns_to_expand = 1;
+  for(int j = 0; j < roads; j++) {
 
-    // e.k. run until there in no town added in the new_frontiers
-    while (towns_to_expand > 0) {
-      towns_to_expand = 0;
-      for(int j = 0; j < roads; j++) {
+    int town1_id = data[j][0];
+    int town2_id = data[j][1];
+    int road_cost = data[j][2];
 
-        int town1_id = data[j][0];
-        int town2_id = data[j][1];
-        int road_cost = data[j][2];
-
-        if(frontier[town1_id] xor frontier[town2_id]) 
-        {
-          int new_town_id = (frontier[town1_id]) ? town2_id : town1_id;
-          if(town_districts[new_town_id] == i) 
-          {
-            frontier[new_town_id] = 1;
-            min_cost += road_cost;
-            towns_to_expand++;
-            break;
-          }
-        }
-      }
+    if (town_districts[town1_id] == town_districts[town2_id] 
+          and UF_find(town1_id) != UF_find(town2_id)) {
+        UF_union(UF_find(town1_id), UF_find(town2_id));
+        min_cost += road_cost;
     }
   }
-  delete [] frontier;
+  UF_free();
 
   return min_cost;
 }
 
 
-// perform BFS on the cities, define districts 
-// and their distances to their district towns
-// return indexes of edges between the districts
-int* process_towns(int **data, int* town_districts, int* town_distances,
-                   int towns, int districts, int roads) {
+// perform BFS on the cities, define their districts 
+void process_towns(int **data, int* town_districts, int towns, int districts, int roads) {
 
-  int frontier_dist, towns_to_expand;
-  int* closed = new int[towns+1];
-  int* last_frontier = new int[towns+1];
-  int* new_frontier = new int[towns+1];
-  int* distr_edges = new int[roads];
+  std::queue<int> queue_towns;
+  int* queue_ids = zero_array(new int[towns+1], towns+1);
+  vector<int>* adjacency_list = new vector<int>[towns+1]; 
+
+  for(int i = 0; i < roads; i++) {
+    int town1_id = data[i][0];
+    int town2_id = data[i][1];
+
+    adjacency_list[town1_id].push_back(town2_id); 
+    adjacency_list[town2_id].push_back(town1_id); 
+  }
 
   for(int i = 1; i <= districts; i++) {
-    // std::cout << "District " << i << ":" << std::endl;
+    queue_towns.push(i);
+    // std::cout << "push " << i << " to queue_towns" << std::endl;
     town_districts[i] = i;
+    queue_ids[i] = 1;
+  }
+  
+  while(not queue_towns.empty()) {
+    int exp_town_id = queue_towns.front();
+    queue_towns.pop();
+    // std::cout << std::endl << "pop " << exp_town_id << " from queue_towns" << std::endl;
+    for(int i = 0; i < (int)adjacency_list[exp_town_id].size(); i++) {
+      int new_town_id = adjacency_list[exp_town_id][i];
 
-    closed = zero_array(closed, towns+1);
-    last_frontier = zero_array(last_frontier, towns+1);
-    new_frontier = zero_array(new_frontier, towns+1);
-
-    frontier_dist = 1; 
-    last_frontier[i] = 1;
-    towns_to_expand = 1;
-
-    // e.k. run until there in no town added in the new_frontiers
-    while (towns_to_expand > 0) {
-      towns_to_expand = 0;
-      for(int j = 0; j < roads; j++) {
-        int town1_id = data[j][0];
-        int town2_id = data[j][1];
-      #if PRINT_INFO
-        std::cout << town1_id << " "
-                  << town2_id << " " 
-                  << data[j][2] << " (" << j << ") ";
-      #endif
-        // is one of the towns in frontier?
-        // is the edge connected to the tree?
-        if(last_frontier[town1_id] xor last_frontier[town2_id]) {
-          int new_town_id = (last_frontier[town1_id]) ? town2_id : town1_id;
-          if(not closed[new_town_id] and new_town_id > districts and
-            (town_distances[new_town_id] == 0 or 
-              frontier_dist < town_distances[new_town_id])) {
-
-            town_distances[new_town_id] = frontier_dist;
-            town_districts[new_town_id] = i;
-            // std::cout << "--> Town " << new_town_id << " is now in " << i << " ";
-            new_frontier[new_town_id] = 1;
-            // std::cout << "Adding " << new_town_id << std::endl;
-            towns_to_expand++;
-          }
-          if(town_districts[town1_id] != town_districts[town2_id]) {
-            distr_edges[j] = 1;
-            // std::cout << "--> Add " << j 
-            //   << " because " << town_districts[town1_id] << 
-            //           " != " << town_districts[town2_id];
-          } else {
-            distr_edges[j] = 0;
-            // std::cout << "--> Del " << j 
-            //   << " because " << town_districts[town1_id] << 
-            //           " == " << town_districts[town2_id];
-          }
-        }
-        // std::cout << std::endl;
+      // check if the town wasn't already in queue
+      if (not queue_ids[new_town_id]) {
+        town_districts[new_town_id] = town_districts[exp_town_id];
+        queue_towns.push(new_town_id);
+        queue_ids[new_town_id] = 1;
+        // std::cout << "push " << new_town_id << " to queue_towns" << std::endl;
       }
-      // print_frontier(new_frontier, towns, frontier_dist, towns_to_expand);
-
-      or_arrays(closed, last_frontier, towns+1);
-      delete [] last_frontier;
-      last_frontier = copy_array(new_frontier, towns+1);
-      new_frontier = zero_array(new_frontier, towns+1);
-      frontier_dist++;
     }
   }
-  delete [] closed;
-  delete [] last_frontier;
-  delete [] new_frontier;
-
-  return distr_edges;
+  delete [] queue_ids;
+  delete [] adjacency_list;
 }
 #endif
+

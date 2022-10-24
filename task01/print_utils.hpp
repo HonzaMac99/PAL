@@ -13,7 +13,7 @@ void print_frontier(int* frontier, int n_towns, int dist, int expansions);
 
 
 void print_ints(int* ints) {
-  std::cout << ints[0] <<" "<< ints[1] <<" "<< ints[2] << std::endl;
+  cout << ints[0] <<" "<< ints[1] <<" "<< ints[2] << endl;
 }
 
 
