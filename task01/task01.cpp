@@ -32,13 +32,13 @@ int main(int argc, char* argv[])
     data = get_file_data(file_name, &n_towns, &n_dtowns, &n_roads);
   }
 
-  // quickSort(data, 0, n_roads-1); // sort data by cost of the roads
+  // sort the roads by their cost in ascending order
   std::sort(data, data+n_roads, mySort); 
 #if PRINT
   std::cout << "Quicksort done" << std::endl;
 #endif
 
-  // set towns dirtrs and d and get list of idx of roads connecting the distrs
+  // find a corresponding district for each town
   int* town_districts = zero_array(new int[n_towns+1], n_towns+1);
   process_towns(data, town_districts, n_towns, n_dtowns, n_roads);
 #if PRINT
