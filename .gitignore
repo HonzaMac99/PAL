@@ -1,5 +1,3 @@
-cpp_tutorials/build
-task01/build
-task02/build
+*/build
 *.swp
 
