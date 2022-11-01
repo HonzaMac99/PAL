@@ -3,44 +3,43 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
+template<class T> void break_point(T input);
+void break_point();
+
 struct Node {
   int id;
-  std::vector<Node*> childs;
-  Node* parent;
+  int index = 0; // unique node number (>0) for scc search 
+  int lowlink = 0; // ties node to others in SCC
+  bool instack = false; // stack utilities
 };
 
-Node* createNode(int id);
-void print_node(Node* node);
 
 
-Node* createNode(int id) {
-  Node* newNode = new Node();
-  newNode->id = id;
-  newNode->parent = NULL;
-  return newNode;
-}
-
-
-void print_node(Node* node) {
-  cout << "Node id is: " << node->id << endl;
-  if (node->parent != NULL) {
-    cout << "Parent id is: " << node->parent->id << endl;
-  }
-  else {
-    cout << "The node is a root" << endl;
+// -------------- stack for tarjan's algorithm -----------------
+class t_stack {
+  std::stack<int> t_stack;
+public:
+  
+  void push_node(int id) {
+    t_stack.push(id);
   }
 
-  if (!node->childs.empty()) {
-    for (int i = 0; i < (int)node->childs.size(); i++) {
-      cout << "Child " << i << " id is: " << node->childs[i]->id << endl;
-    }
-  } 
-  else {
-    cout << "The node has no children!" << endl;
+  int get_top() {
+    int node_id = t_stack.top();
+    return node_id;
   }
-  cout << "-------------------------" << endl << endl;
-}
+
+  int pop_node() {
+    int node_id = t_stack.top();
+    t_stack.pop();
+    return node_id;
+  }
+};
+// -------------------------------------------------------------
+
 #endif
+
