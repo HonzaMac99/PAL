@@ -54,19 +54,19 @@ int main(int argc, char* argv[])
 
   //print_scc(scc_vector);
 
-  int* results = get_prosp_cross(scc_vector, out_streets);
+  int p_crossings = 0, max_var = 0, min_cost = -1;
+  get_prosp_cross(scc_vector, out_streets, &p_crossings, &max_var, &min_cost);
 #if PRINT
   std::cout << "Prospective crossings found" << std::endl;
 #endif
 
-  std::cout << results[0] << " " << results[1] << " " << results[2] << std::endl;
+  std::cout << p_crossings << " " << max_var << " " << min_cost << std::endl;
 
   // clear the memory
   for (int i = 0; i < n_streets; i++)
     delete [] data[i];
   delete [] data;
   delete [] graph_verts;
-  delete [] results;
   
   return 0;
 }
