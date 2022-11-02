@@ -13,7 +13,7 @@ bool mySort(int* a, int*b) {
 
 int main(int argc, char* argv[])
 {
-  // Read the input from file of stdin
+  // Read the input from file or stdin
   std::string file_name;
   int stdin_input = 1;
   if (argc > 1) {
