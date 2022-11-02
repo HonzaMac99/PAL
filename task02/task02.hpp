@@ -19,7 +19,7 @@ void process_crosses(int** data, Node* vertices, int n_streets);
 void find_scc(Node* vertices, VEC_P out_streets, t_stack* my_stack, int node_id, 
                 int* index, int* n_scc, VEC_2D scc_vec);
 VEC_2D get_all_scc(Node* vertices, VEC_P out_streets, int n_crossings);
-int* get_prosp_cross(VEC_2D strong_components, Node* vertices);
+int* get_prosp_cross(VEC_2D strong_components, int* out_streets);
 
 
 // contruct an adjacency list from the streets
@@ -100,12 +100,35 @@ VEC_2D get_all_scc(Node* vertices, VEC_P out_streets, int n_crossings)
   return scc_vector;
 }
 
+int* get_best_cross(vector<int> scc_ids, int* out_streets) {
+  int* results = new int[3];
+  int p_crossings = 0, max_var = 0, min_cost = 0;
 
-int* get_prosp_cross(VEC_2D strong_components, Node* vertices) 
+}
+
+int* get_prosp_cross(VEC_2D strong_components, int* out_streets) 
 {
   int* results = new int[3];
   int p_crossings = 0, max_var = 0, min_cost = 0;
 
+  int max_scc_size = 0;
+  vector<int> best_indexes;
+  
+  for(int i = 0; i < (int)strong_components.size(); i++) {
+    int scc_size = (int)strong_components[i].size();
+    if(scc_size > max_scc_size) {
+      max_scc_size = scc_size;
+      best_indexes.clear();
+    } else if (scc_size == max_scc_size) {
+      best_indexes.push_back(i);
+    }
+  }
+
+
+  for(int i = 0; i < (int)best_indexes.size(); i++) {
+    
+  }
+  
 
   results[0] = p_crossings;
   results[1] = max_var;

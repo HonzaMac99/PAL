@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
   //print_scc(scc_vector);
 
-  int* results = get_prosp_cross(scc_vector, graph_verts);
+  int* results = get_prosp_cross(scc_vector, out_streets);
 #if PRINT
   std::cout << "Prospective crossings found" << std::endl;
 #endif
