@@ -11,7 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(task02 task02.cpp)
 
 enable_testing()
-add_test(NAME Runs COMMAND task02 -f)
 
 function(do_test target arg result)
   add_test(NAME Comp<${arg}> COMMAND ${target} ${arg})
@@ -19,6 +18,9 @@ function(do_test target arg result)
     PROPERTIES PASS_REGULAR_EXPRESSION ${result}
     )
 endfunction()
+
+# check if the executable is able to run
+add_test(NAME Runs COMMAND task02 -f)
 
 # do a bunch of result based tests
 foreach(i RANGE 1 9) 

@@ -12,7 +12,6 @@ add_executable(task01 task01.cpp)
 #add_executable(test test.cpp)
 
 enable_testing()
-add_test(NAME Runs COMMAND task01 -f)
 
 function(do_test target arg result)
   add_test(NAME Comp<${arg}> COMMAND ${target} ${arg})
@@ -20,6 +19,9 @@ function(do_test target arg result)
     PROPERTIES PASS_REGULAR_EXPRESSION ${result}
     )
 endfunction()
+
+# check if the executable is able to run
+add_test(NAME Runs COMMAND task01 -f)
 
 # do a bunch of result based tests
 foreach(i RANGE 1 9) 

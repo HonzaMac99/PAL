@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include "node.hpp"
 
 #define VEC_2D vector<vector<int>>
 #define VEC_P vector<int>*
@@ -30,13 +29,6 @@ void break_point(T input) {
 void break_point() {
   cout << "==BP==" << endl;
   cin >> break_point_arr[break_point_n]; // pauses the programm here 
-}
-
-void print_v(Node v, std::string direction) {
-  cout << direction << endl; 
-  cout << "Id: " << v.id << endl;
-  cout << "Ix: " << v.index << endl;
-  cout << "Lw: " << v.lowlink << endl;
 }
 
 void print_scc(VEC_2D strong_components) 

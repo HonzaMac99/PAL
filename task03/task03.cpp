@@ -27,29 +27,21 @@ int main(int argc, char* argv[])
   int n_old_servers, n_old_connections;
   int n_servers, n_connections, n_fast_servers;
   int *fast_servers;
+  int **new_net_con;
   VEC *old_network, *new_network;
   if (stdin_input) {
     get_stdin_data(old_network, &n_old_servers, &n_old_connections, 
                      new_network, &n_servers, &n_connections, 
-                       fast_servers, &n_fast_servers);
+                       new_net_con, fast_servers, &n_fast_servers);
   }
   else {
     get_file_data(file_name, 
                     old_network, &n_old_servers, &n_old_connections, 
                       new_network, &n_servers, &n_connections, 
-                        fast_servers, &n_fast_servers);
+                        new_net_con, fast_servers, &n_fast_servers);
   }
-  
-  // adjacency lists for children and parents of the nodes
-  //VEC* out_streets = new vector<int>[n_crossings]; 
-  
-  // list of graph node structs 
-  // Node* graph_verts = new Node[n_crossings];
-  // for(int i = 0; i < n_crossings; i++) {
-  //   graph_verts[i].id = i;
-  // } 
 
-  std::cout << "0 0 0" << std::endl;
+  std::cout << "0 0" << std::endl;
 
   return 0;
 }
