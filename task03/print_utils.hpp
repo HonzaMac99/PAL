@@ -32,37 +32,10 @@ void break_point() {
   cin >> break_point_arr[break_point_n]; // pauses the programm here 
 }
 
-void print_v(Node v, std::string direction) {
-  cout << direction << endl; 
-  cout << "Id: " << v.id << endl;
-  cout << "Ix: " << v.index << endl;
-  cout << "Lw: " << v.lowlink << endl;
-}
-
-void print_scc(VEC_2D strong_components) 
+void print_adj_list(vector<int>* adj_list, int n_of_items) 
 {
-  for(int i = 0; i < (int)strong_components.size(); i++) 
-  {
-    int max_elements = 0;
-    int n_elements = (int)strong_components[i].size();
-    if (n_elements > max_elements) max_elements = n_elements;
-
-    cout << "Scc " << i << ": ["; 
-    for(int j = 0; j < n_elements-1; j++) 
-    {
-      cout << strong_components[i][j] << ", ";
-    }
-    if (n_elements != 0) 
-      cout << strong_components[i][n_elements-1] << "]" << endl;
-    else
-      cout << "]" << endl;
-  }
   cout << endl;
-}
-
-void print_adj_list(vector<int>* adj_list, int n_crossings) 
-{
-  for(int i = 0; i < n_crossings; i++) 
+  for(int i = 0; i < n_of_items; i++) 
   {
     int n_succ = (int)adj_list[i].size();
 
@@ -77,10 +50,6 @@ void print_adj_list(vector<int>* adj_list, int n_crossings)
       cout << "]" << endl;
   }
   cout << endl;
-}
-
-void print_ints(int* ints) {
-  cout << ints[0] <<" "<< ints[1] << endl;
 }
 
 #endif
