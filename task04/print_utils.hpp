@@ -4,8 +4,9 @@
 #include <iostream>
 #include <vector>
 
-#define VEC_2D vector<vector<int>>
-#define VEC_P vector<int>*
+#define llong long long
+#define VEC vector<llong>
+#define VEC_2D vector<vector<llong>>
 
 using namespace std;
 

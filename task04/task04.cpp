@@ -1,14 +1,14 @@
 #include <iostream>
-#include <algorithm>
+#include <fstream>
+#include <sstream>
 #include "task04.hpp"
-#include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define VEC vector<int>
-#define VEC_2D vector<vector<int>>
+#define llong long long
+#define VEC vector<llong>
+#define VEC_2D vector<vector<llong>>
 
 #define PRINT 1
-
 
 
 int main(int argc, char* argv[])
@@ -23,10 +23,11 @@ int main(int argc, char* argv[])
     stdin_input = 0;
   }
     
-  int m_max, d;
+  long long M_max;
+  int D;
   if (stdin_input) {
-    std::cin >> m_max; 
-    std::cin >> d; 
+    std::cin >> M_max; 
+    std::cin >> D;
   }
   else {
     std::ifstream MyReadFile(file_name);
@@ -35,11 +36,17 @@ int main(int argc, char* argv[])
     getline(MyReadFile, fileLine);
     ss << fileLine;
 
-    ss >> m_max; 
-    ss >> d;
+    ss >> M_max; 
+    ss >> D;
   }
 
-  std::cout << m_max << " " << d << std::endl;
+
+  long long L;
+  int R_max; 
+  get_lehmers(M_max, D, &L, &R_max);
+
+
+  std::cout << L << " " << R_max << std::endl;
 
   return 0;
 }

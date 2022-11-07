@@ -44,21 +44,21 @@ int main(int argc, char* argv[])
   process_crosses(data, out_streets, n_streets);
 #if PRINT
   std::cout << "Graph created" << std::endl;
-  //print_adj_list(out_streets, n_crossings);
+  // print_adj_list(out_streets, n_crossings);
 #endif
   
   VEC_2D scc_vector = get_all_scc(graph_verts, out_streets, n_crossings);
 #if PRINT
   std::cout << "Strong components established" << std::endl;
-  //std::cout << std::endl;
-  //print_scc(scc_vector);
+  // std::cout << std::endl;
+  // print_scc(scc_vector);
 #endif
 
   scc_vector = refine_all_scc(graph_verts, out_streets, scc_vector);
 #if PRINT
   std::cout << "Strong components refined" << std::endl;
-  //std::cout << std::endl;
-  //print_scc(scc_vector);
+  // std::cout << std::endl;
+  // print_scc(scc_vector);
 #endif
 
   int p_crossings = 0, max_var = 0, min_cost = -1;

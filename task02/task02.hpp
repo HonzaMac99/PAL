@@ -296,7 +296,7 @@ int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, i
         // std::cout << "push " << new_cross_id << " to queue_crosses" << std::endl;
       }
       for(int j = 0; j < max_var; j++) {
-        if (new_cross_id == scc_ids[j] and trail_dists[j] == 0) {
+        if (new_cross_id == scc_ids[j] and trail_dists[j] == 0 and scc_ids[j] != c_id) {
           trail_dists[j] = trail_len;
           n_dists++;  
           // std::cout << c_id << "-->" << scc_ids[j] << ": " << trail_len 
@@ -346,26 +346,26 @@ void get_best_cross(vector<int> scc_ids, VEC* out_streets, int n_crossings,
 void get_prosp_cross(VEC_2D strong_components, VEC* out_streets, int n_crossings,
                       int* p_crossings, int* max_var, int* min_cost)
 {
-  vector<int> best_indexes;
+  vector<int> max_scc_indexes;
   
   // find every scc that has the max_variability
   for(int i = 0; i < (int)strong_components.size(); i++) {
     int scc_size = (int)strong_components[i].size();
     if(scc_size > *max_var) {
       *max_var = scc_size;
-      best_indexes.clear();
-      best_indexes.push_back(i);
+      max_scc_indexes.clear();
+      max_scc_indexes.push_back(i);
     } 
     else if (scc_size == *max_var) {
-      best_indexes.push_back(i);
+      max_scc_indexes.push_back(i);
     }
   }
 
   // look for prospective crossings in every scc with max_variability 
-  for(int i = 0; i < (int)best_indexes.size(); i++) {
-    int index = best_indexes[i];
+  for(int i = 0; i < (int)max_scc_indexes.size(); i++) {
+    int scc_index = max_scc_indexes[i];
     // std::cout << "Scc " << index << ": " <<  std::endl;
-    get_best_cross(strong_components[index], out_streets, n_crossings, 
+    get_best_cross(strong_components[scc_index], out_streets, n_crossings, 
                                               p_crossings, *max_var, min_cost);  
   }
 
