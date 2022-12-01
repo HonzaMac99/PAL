@@ -20,14 +20,12 @@
 
 
 void process_crosses(int** data, VEC* out_streets, int n_streets); 
-void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id, 
-                int* index, int* n_scc, VEC_2D* new_scc_vec, VEC scc_ids);
 void find_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id, 
                 int* index, int* n_scc, VEC_2D* scc_vec);
 VEC_2D get_all_scc(Node* vertices, VEC* out_streets, int n_crossings);
-void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id, 
-                int* index, int* n_scc, VEC_2D* scc_vec, VEC old_scc_ids);
-VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC_2D* old_scc_ids);
+void refine_scc(Node* vertices, VEC* out_streets, VEC* new_out_streets, t_stack* my_stack, 
+                  int node_id, int* index, int* n_scc, VEC_2D* scc_vec, VEC old_scc_ids);
+VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC* new_out_streets, VEC_2D* old_scc_ids);
 int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, int c_id);
 void get_best_cross(vector<int> scc_ids, VEC* out_streets, int n_crossings, 
                     int* p_crossings, int max_var, int* min_cost);
@@ -145,8 +143,8 @@ VEC_2D get_all_scc(Node* vertices, VEC* out_streets, int n_crossings)
 }
 
 
-void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id, 
-                int* index, int* n_scc, VEC_2D* scc_vec, VEC old_scc_ids)
+void refine_scc(Node* vertices, VEC* out_streets, VEC* new_out_streets, t_stack* my_stack, 
+                  int node_id, int* index, int* n_scc, VEC_2D* scc_vec, VEC old_scc_ids)
 {
   // V ... expanding crossing with its properties -> V = vertices[node_id]
   // W ... its successors with their properties -> W = vertices[succ_id]
@@ -165,8 +163,9 @@ void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id
     // TODO: potentially slow
     // check if the crossing is in the scc that is refined 
     for(int k = 0; k < (int)old_scc_ids.size(); k++) {
-      if(succ_id == old_scc_ids[k]){
+      if(succ_id == old_scc_ids[k]) {
         in_scc = true;
+        new_out_streets[V.id].push_back(succ_id);
         break;
       }
     }
@@ -179,7 +178,7 @@ void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id
       print_v(V, "---->");
       break_point();
 #endif
-      refine_scc(vertices, out_streets, my_stack, W.id, index, n_scc, scc_vec, old_scc_ids);
+      refine_scc(vertices, out_streets, new_out_streets, my_stack, W.id, index, n_scc, scc_vec, old_scc_ids);
       // std::cout << W.id << " closed? " << W.closed << std::endl;
       // break_point();
       V.lowlink = min(V.lowlink, W.lowlink);
@@ -219,7 +218,7 @@ void refine_scc(Node* vertices, VEC* out_streets, t_stack* my_stack, int node_id
 
 
 // tarjan's algorithm for getting the strong components of the sccs without weak crossings 
-VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC_2D old_scc_vec)
+VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC* new_out_streets, VEC_2D old_scc_vec)
 {
   vector<vector<int>> new_scc_vec;
   t_stack my_stack;
@@ -243,7 +242,7 @@ VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC_2D old_scc_vec)
       int c_id = old_scc_vec[i][j];
       // std::cout << "c_id: " << c_id << std::endl;
       if (vertices[c_id].index == 0) { // yet unvisited
-        refine_scc(vertices, out_streets, &my_stack, c_id, 
+        refine_scc(vertices, out_streets, new_out_streets, &my_stack, c_id, 
                     &index, &n_scc, &new_scc_vec, old_scc_vec[i]);   
       }
     }
@@ -256,9 +255,9 @@ VEC_2D refine_all_scc(Node* vertices, VEC* out_streets, VEC_2D old_scc_vec)
 
 
 // searches the shortest trail from one crossing to another crossing in the grahp
-int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, int c_id) 
+int* get_min_trails(VEC* new_out_streets, int n_crosses, int max_var, VEC scc_ids, int c_id) 
 {
-  int* trail_dists = zero_array(new int[max_var], max_var); 
+  int* trail_dists = zero_array(new int[n_crosses], n_crosses); 
   int n_dists = 1;
 
   std::queue<int> queue_crosses;
@@ -278,8 +277,8 @@ int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, i
       expecting_new_dist_id = 1;
     }
 
-    for(int i = 0; i < (int)out_streets[exp_cross_id].size(); i++) {
-      int new_cross_id = out_streets[exp_cross_id][i];
+    for(int i = 0; i < (int)new_out_streets[exp_cross_id].size(); i++) {
+      int new_cross_id = new_out_streets[exp_cross_id][i];
 
       // check if the new cross isn't already in queue
       if (not in_queue[new_cross_id]) {
@@ -295,13 +294,11 @@ int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, i
         }
         // std::cout << "push " << new_cross_id << " to queue_crosses" << std::endl;
       }
-      for(int j = 0; j < max_var; j++) {
-        if (new_cross_id == scc_ids[j] and trail_dists[j] == 0 and scc_ids[j] != c_id) {
-          trail_dists[j] = trail_len;
-          n_dists++;  
-          // std::cout << c_id << "-->" << scc_ids[j] << ": " << trail_len 
-          //           << " (" << n_dists << ")" << std::endl;
-        }
+      if (trail_dists[new_cross_id] == 0 and new_cross_id != c_id) {
+        trail_dists[new_cross_id] = trail_len;
+        n_dists++;  
+        // std::cout << c_id << "-->" << scc_ids[j] << ": " << trail_len 
+        //           << " (" << n_dists << ")" << std::endl;
       } 
     }
     if (n_dists == max_var) {
@@ -311,25 +308,27 @@ int* get_min_trails(VEC* out_streets, int n_crosses, int max_var, VEC scc_ids, i
   return trail_dists; 
 }
 
-void get_best_cross(vector<int> scc_ids, VEC* out_streets, int n_crossings, 
+void get_best_cross(vector<int> scc_ids, VEC* new_out_streets, int n_crossings, 
                     int* p_crossings, int max_var, int* min_cost) 
 {
 
-  int** trail_dists = new int*[max_var];
+  int** trail_dists = new int*[n_crossings];
   for(int i = 0; i < max_var; i++) {
     int c_id = scc_ids[i];
-    int* new_trail_dists = get_min_trails(out_streets, n_crossings, max_var, scc_ids, c_id);
-    trail_dists[i] = new_trail_dists;
+    int* new_trail_dists = get_min_trails(new_out_streets, n_crossings, max_var, scc_ids, c_id);
+    trail_dists[c_id] = new_trail_dists;
+    // std::cout << "Got min trails for " << c_id <<  std::endl;
   }
-  std::cout << "Got min trails" << std::endl;
 
   for(int i = 0; i < max_var; i++) {
     int cross_cost = 0;
+    int c1_id = scc_ids[i];
     for(int j = 0; j < max_var; j++) {
       if (i == j) 
         continue;
-      cross_cost += 2*trail_dists[i][j];
-      cross_cost += trail_dists[j][i];
+      int c2_id = scc_ids[j];
+      cross_cost += 2*trail_dists[c1_id][c2_id];
+      cross_cost += trail_dists[c2_id][c1_id];
     }
 
     if(cross_cost < *min_cost or *min_cost == -1) {
@@ -368,7 +367,7 @@ void get_prosp_cross(VEC_2D strong_components, VEC* out_streets, int n_crossings
     get_best_cross(strong_components[scc_index], out_streets, n_crossings, 
                                               p_crossings, *max_var, min_cost);  
   }
-
+  
   (*max_var)--;
 }
 #endif
