@@ -43,10 +43,18 @@ int main(int argc, char* argv[])
 
   long long L;
   int R_max; 
-  get_lehmers(M_max, D, &L, &R_max);
-
-
-  std::cout << L << " " << R_max << std::endl;
+  //get_lehmers(M_max, D, &L, &R_max);
+  
+  int test_m_max = 19;
+  VEC prime_fs = eratosthenes(test_m_max); 
+  std::cout << prime_fs.back() << std::endl;
+  llong root = get_primitive_root(test_m_max, prime_fs);
+  std::cout << root << std::endl;
+  
+  //VEC primes = eratosthenes(100000000);
+  //std::cout << primes.back() << std::endl;
+  
+  //std::cout << L << " " << R_max << std::endl;
 
   return 0;
 }

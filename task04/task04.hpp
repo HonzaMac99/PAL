@@ -122,7 +122,6 @@ llong get_primitive_root(llong M, VEC pf)
       }
     }
   }
-
   return R;
 }
 
@@ -134,9 +133,8 @@ void generate_modulos(VEC primes, llong M_max, int* L, int* R_max) {
 
 void get_lehmers(llong M_max, int D, int* L, int* R_max) {
 
-
   VEC primes = eratosthenes(D);
-  //TODO: maybe get just the 0/1 array of all numbers
+  //TODO: maybe just get the 0/1 array of all numbers
 
 
   *L = M_max*0;
