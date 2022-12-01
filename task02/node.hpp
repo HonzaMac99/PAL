@@ -17,6 +17,7 @@ struct Node {
   bool instack = false; // stack utilities
   bool weak = false;
   bool closed = false;
+  int dist = 0; // used in Djikstra's algorithm
 };
 
 

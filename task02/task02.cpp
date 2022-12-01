@@ -8,7 +8,7 @@
 #define VEC vector<int>
 #define VEC_2D vector<vector<int>>
 
-#define PRINT 1
+#define PRINT 0
 
 
 int main(int argc, char* argv[])
@@ -54,7 +54,9 @@ int main(int argc, char* argv[])
   // print_scc(scc_vector);
 #endif
 
-  scc_vector = refine_all_scc(graph_verts, out_streets, scc_vector);
+  VEC* new_out_streets = new vector<int>[n_crossings]; 
+  scc_vector = refine_all_scc(graph_verts, out_streets, 
+                              new_out_streets, scc_vector);
 #if PRINT
   std::cout << "Strong components refined" << std::endl;
   // std::cout << std::endl;
@@ -62,7 +64,7 @@ int main(int argc, char* argv[])
 #endif
 
   int p_crossings = 0, max_var = 0, min_cost = -1;
-  get_prosp_cross(scc_vector, out_streets, n_crossings, 
+  get_prosp_cross(scc_vector, new_out_streets, n_crossings, 
                     &p_crossings, &max_var, &min_cost);
 #if PRINT
   std::cout << "Prospective crossings found" << std::endl;
