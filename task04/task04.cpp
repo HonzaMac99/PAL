@@ -43,7 +43,8 @@ int main(int argc, char* argv[])
 
   long long L;
   int R_max; 
-  get_lehmers(M_max, D, &L, &R_max);
+  int* primes = get_prime_factors();
+  get_lehmers(M_max, D, primes, &L, &R_max);
 
 
   std::cout << L << " " << R_max << std::endl;
