@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
 
   long long L;
   int R_max; 
+<<<<<<< HEAD
   //get_lehmers(M_max, D, &L, &R_max);
   
   int test_m_max = 19;
@@ -55,6 +56,13 @@ int main(int argc, char* argv[])
   //std::cout << primes.back() << std::endl;
   
   //std::cout << L << " " << R_max << std::endl;
+=======
+  int* primes = get_prime_factors();
+  get_lehmers(M_max, D, primes, &L, &R_max);
+
+
+  std::cout << L << " " << R_max << std::endl;
+>>>>>>> c8364b251ceefc4dcde97ef870730e1c512fc749
 
   return 0;
 }
