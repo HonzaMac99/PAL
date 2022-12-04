@@ -5,8 +5,7 @@
 #include "print_utils.hpp"
 
 #define llong long long
-#define VEC vector<llong>
-#define VEC_2D vector<vector<llong>>
+#define VEC std::vector<int>
 
 #define PRINT 1
 
@@ -21,6 +20,10 @@ int main(int argc, char* argv[])
     if (file_name == "-f")
       file_name = "/home/honzamac/PAL/task04/datapub/pub01.in";
     stdin_input = 0;
+  } 
+  else {
+    std::cerr << "Specify the file name (or -f) in argument" << std::endl;
+    return 1;
   }
     
   long long M_max;
@@ -41,28 +44,21 @@ int main(int argc, char* argv[])
   }
 
 
-  long long L;
-  int R_max; 
-<<<<<<< HEAD
-  //get_lehmers(M_max, D, &L, &R_max);
+  long long L = 0;
+  int R_max = 0; 
+  VEC primes = get_primes(D);
+  // starting with M = 1 + 2 = 3
+  VEC prime_factors = {2};
+  llong M = 3;
+  int index = 0;
   
-  int test_m_max = 19;
-  VEC prime_fs = eratosthenes(test_m_max); 
-  std::cout << prime_fs.back() << std::endl;
-  llong root = get_primitive_root(test_m_max, prime_fs);
-  std::cout << root << std::endl;
-  
-  //VEC primes = eratosthenes(100000000);
-  //std::cout << primes.back() << std::endl;
-  
-  //std::cout << L << " " << R_max << std::endl;
-=======
-  int* primes = get_prime_factors();
-  get_lehmers(M_max, D, primes, &L, &R_max);
-
+  if (M < M_max) {
+    L++;
+    get_prim_root(M, prime_factors, &R_max);
+    get_lehmers(primes, prime_factors, M, index, M_max, &L, &R_max);
+  }
 
   std::cout << L << " " << R_max << std::endl;
->>>>>>> c8364b251ceefc4dcde97ef870730e1c512fc749
 
   return 0;
 }

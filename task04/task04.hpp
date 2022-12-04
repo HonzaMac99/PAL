@@ -7,48 +7,46 @@
 #include "print_utils.hpp"
 
 #define llong long long
-#define VEC vector<llong>
-#define VEC_2D vector<vector<llong>>
+#define VEC std::vector<int>
 
 #define PRINT_INFO 0
 #define MAX_D 40
 
-int* get_prime_factors();
-bool is_prime(int num);
-bool is_prime(int num, int* n_array);
-void get_lehmers(llong M_max, int D, int* primes, int* L, int* R_max);
+VEC get_primes(int max_num);
+bool is_prime(llong num);
+void get_lehmers(VEC primes, VEC prime_factors, llong M_old, int index, 
+                  llong M_max, llong* L, int* R_max);
+void get_prim_root(llong M, VEC prime_factors, int* R_max);
 
 
-// get all primes that are not larger than maximal value of D 
-int* get_prime_factors()
+// get all primes that are not larger than D (max_num) 
+VEC get_primes(int max_num)
 {
-  int* numbers = new int[MAX_D+1];
+  int* numbers = new int[max_num+1];
 
-  std::fill(numbers, numbers+MAX_D+1, 1);
+  std::fill(numbers, numbers+max_num+1, 1);
 
-  int sq = sqrt(MAX_D);
+  int sq = ceil(sqrt(max_num));
 
   for(int i = 2; i < sq; i++) {
     if(numbers[i]) {
-      for(int j = pow(i, 2); j <= MAX_D; j+=i) {
+      for(int j = int(pow(i, 2)); j <= max_num; j+=i) {
         numbers[j] = 0;
       }
     }
   }
 
-  // VEC primes;
-  // for(int i = 0; i <= MAX_D; i++) {
-  //   if (numbers[i] and i >= 2) 
-  //     primes.push_back(i);
-  // }
-  // delete [] numbers;
-  // return primes;
-  
-  return numbers;
+  VEC primes;
+  for(int i = 0; i <= max_num; i++) {
+    if (numbers[i] and i >= 2)
+      primes.push_back(i);
+  }
+  delete [] numbers;
+  return primes;
 }
 
 
-bool is_prime(int num) 
+bool is_prime(llong num) 
 {
   // Corner cases
   if (num <= 1)  
@@ -57,32 +55,23 @@ bool is_prime(int num)
     return true;
  
   // This is checked so that we can skip 
-  // middle five numbers in below loop
-  if (num % 2 == 0 || num % 3 == 0) 
+  // middle five numbers in the loop below
+  if (num % 2 == 0 || num % 3 == 0)
     return false;
  
-  for (int i = 5; i*i <= num; i+=6)
-    if (num % i == 0 || num % (i + 2) == 0)
+  for (llong i = 5; i*i <= num; i+=6)
+    if (num % i == 0 || num % (i + 2) == 0) {
       return false;
+    }
  
+
   return true;
-}
-
-
-bool is_prime(int num, int* primes_array) 
-{
-  if (num <= MAX_D) {
-    return primes_array[num];
-  } 
-  else {
-    return is_prime(num);
-  }
 }
 
 
 // Function to return the smallest
 // prime number greater than N
-int get_next_prime(int N, int* primes)
+int get_next_prime(int N)
 {
   // Base case
   if (N <= 1)
@@ -95,61 +84,73 @@ int get_next_prime(int N, int* primes)
   // true for a number greater than n
   while (!found) {
     prime++;
-    if (is_prime(prime, primes))
+    if (is_prime(prime))
       found = true;
   }
   return prime;
 }
 
 
-int get_next_pf(llong M, llong pf) {
-  int next_pf = get_next_prime(pf);
-  while(M%next_pf != 0) {
-    next_pf = get_next_prime(next_pf);
-    if(pow(next_pf,2) > M) 
-      return 0;
-  }
-  return next_pf;
-}
-
-
-int get_lehmers(llong M_max, int D, int* prime_factors, int* L, int* R_max, int index)
+void get_prim_root(llong M, VEC prime_factors, int* R_max) 
 {
-<<<<<<< HEAD
-  llong R = 2; // root
-  int is_root = 0; 
-  while(not is_root) {
-    is_root = 1;
-    for(int i = 0; i < (int)pf.size(); i++) {
-      llong cond = (llong)pow(R, (M-1)/pf[i])%M;
-      if(cond == 1) {
-        is_root = 0;
-        R++;
-        break;
-      }
+  int R = 1;
+  bool is_prim_root = false;
+  while(not is_prim_root) {
+    R++;
+    is_prim_root = true;
+    for(int i = 0; i < int(prime_factors.size()); i++) {
+       llong prime_factor = (llong)prime_factors[i];
+       llong powr = (M-1)/prime_factor;
+       //TODO: solve this overflow
+       llong R_pow = pow(R, powr);
+       if (R_pow % M == 1) {
+         is_prim_root = false;
+         break;
+       }
     }
   }
-  return R;
+  std::cout << "M = " << M << ", R = " << R << std::endl;
+  break_point();
+  *R_max = (R > *R_max) ? R : *R_max;
 }
 
 
-void generate_modulos(VEC primes, llong M_max, int* L, int* R_max) {
+void get_lehmers(VEC primes, VEC prime_factors, llong M_old, int index, 
+                  llong M_max, llong* L, int* R_max) 
+{
+  bool expanded_pf = false;
+  for(int i = index; i < int(primes.size()); i++) 
+  {
+    llong M_new = (M_old-1)*primes[i]+1;
+    
+    /*
+    std::cout << "M_new = 1 + " << M_old-1 << "*" << primes[i] 
+              << " = " << M_new << std::endl; 
+    */
+    
+    if (M_new > M_max) {
+      break;
+    } 
+    else 
+    {
+      if (i != index) {
+        prime_factors.push_back(primes[i]);
+        expanded_pf = true;
+      }
+      if (is_prime(M_new)) {
+        (*L)++;
+        //std::cout << "  M_new=" << M_new << " is a prime" << std::endl;
+        get_prim_root(M_new, prime_factors, R_max);
+        //std::cout << "  R_max=" << *R_max << std::endl;
+      }
+      //break_point();
+      get_lehmers(primes, prime_factors, M_new, i, M_max, L, R_max);
+    } 
+  }
 
+  if (expanded_pf)
+    prime_factors.pop_back();
+  return;    
 }
-
-
-void get_lehmers(llong M_max, int D, int* L, int* R_max) {
-
-  VEC primes = eratosthenes(D);
-  //TODO: maybe just get the 0/1 array of all numbers
-
-=======
-  int ret =    
->>>>>>> c8364b251ceefc4dcde97ef870730e1c512fc749
-
-}
-
-
 #endif
-
 
