@@ -28,7 +28,7 @@ VEC get_primes(int max_num)
 
   int sq = ceil(sqrt(max_num));
 
-  for(int i = 2; i < sq; i++) {
+  for(int i = 2; i <= sq; i++) {
     if(numbers[i]) {
       for(int j = int(pow(i, 2)); j <= max_num; j+=i) {
         numbers[j] = 0;
@@ -64,19 +64,18 @@ bool is_prime(llong num)
       return false;
     }
  
-
   return true;
 }
 
 
+// due to overflowing when doing power of R to llong,
+// another approach is required -> solve it dynamically
 llong compute_modulo(llong M, llong R_power, int R)
 {
   if (R_power == 1)
     return R;
   
   llong ret;
-  //std::cout << "Continuing with power: " << R_power/2 << std::endl;
-  //break_point();
   if (R_power % 2 != 0) {
     ret = R;
     ret *= (llong)powl(compute_modulo(M, (R_power-1)/2, R), 2) % M;
@@ -85,6 +84,7 @@ llong compute_modulo(llong M, llong R_power, int R)
   else {
     ret = (llong)powl(compute_modulo(M, R_power/2, R), 2) % M;
   }
+
   return ret;
 }
 
@@ -105,12 +105,10 @@ void get_prim_root(llong M, VEC prime_factors, int* R_max)
       } 
       else if (R_pow % 2 != 0) {
         modulo = R;   
-        //std::cout << "INITIAL power: " << R_pow << std::endl;
         modulo *= compute_modulo(M, R_pow-1, R);
         modulo %= M;
       } 
       else {
-        //std::cout << "INITIAL power: " << R_pow << std::endl;
         modulo = compute_modulo(M, R_pow, R);
       }
 
@@ -150,7 +148,8 @@ void get_lehmers(VEC primes, VEC prime_factors, llong M_old, int index,
       }
       if (is_prime(M_new)) {
         (*L)++;
-        //std::cout << "  M_new=" << M_new << " is a prime" << std::endl;
+        // 281251 repeats
+        // std::cout << "  M_new=" << M_new << " is a prime" << std::endl;
         get_prim_root(M_new, prime_factors, R_max);
         //std::cout << "  R_max=" << *R_max << std::endl;
       }

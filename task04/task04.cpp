@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
     return 1;
   }
     
-  long long M_max;
+  llong M_max;
   int D;
   if (stdin_input) {
     std::cin >> M_max; 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   }
 
 
-  long long L = 0;
+  llong L = 0;
   int R_max = 0; 
   VEC primes = get_primes(D);
   // starting with M = 1 + 2 = 3
@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
   // std::cout << "Test modulo: " << test << std::endl;
   // break_point();
   
+  // check if the first combination is ok
   if (M < M_max) {
     L++;
     get_prim_root(M, prime_factors, &R_max);
