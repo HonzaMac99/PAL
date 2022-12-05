@@ -69,25 +69,23 @@ bool is_prime(llong num)
 }
 
 
-// Function to return the smallest
-// prime number greater than N
-int get_next_prime(int N)
+llong compute_modulo(llong M, llong R_power, int R)
 {
-  // Base case
-  if (N <= 1)
-    return 2;
-
-  int prime = N;
-  bool found = false;
-
-  // Loop continuously until isPrime returns
-  // true for a number greater than n
-  while (!found) {
-    prime++;
-    if (is_prime(prime))
-      found = true;
+  if (R_power == 1)
+    return R;
+  
+  llong ret;
+  //std::cout << "Continuing with power: " << R_power/2 << std::endl;
+  //break_point();
+  if (R_power % 2 != 0) {
+    ret = R;
+    ret *= (llong)powl(compute_modulo(M, (R_power-1)/2, R), 2) % M;
+    ret %= M;
+  } 
+  else {
+    ret = (llong)powl(compute_modulo(M, R_power/2, R), 2) % M;
   }
-  return prime;
+  return ret;
 }
 
 
@@ -99,18 +97,31 @@ void get_prim_root(llong M, VEC prime_factors, int* R_max)
     R++;
     is_prim_root = true;
     for(int i = 0; i < int(prime_factors.size()); i++) {
-       llong prime_factor = (llong)prime_factors[i];
-       llong powr = (M-1)/prime_factor;
-       //TODO: solve this overflow
-       llong R_pow = pow(R, powr);
-       if (R_pow % M == 1) {
-         is_prim_root = false;
-         break;
-       }
+      llong prime_factor = (llong)prime_factors[i];
+      llong R_pow = (M-1)/prime_factor;
+      llong modulo;
+      if (R_pow == 1) {
+        modulo = R;
+      } 
+      else if (R_pow % 2 != 0) {
+        modulo = R;   
+        //std::cout << "INITIAL power: " << R_pow << std::endl;
+        modulo *= compute_modulo(M, R_pow-1, R);
+        modulo %= M;
+      } 
+      else {
+        //std::cout << "INITIAL power: " << R_pow << std::endl;
+        modulo = compute_modulo(M, R_pow, R);
+      }
+
+      if (modulo == 1) {
+        is_prim_root = false;
+        break;
+      }
     }
   }
-  std::cout << "M = " << M << ", R = " << R << std::endl;
-  break_point();
+  //std::cout << "M = " << M << ", R = " << R << std::endl;
+  //break_point();
   *R_max = (R > *R_max) ? R : *R_max;
 }
 

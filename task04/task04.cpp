@@ -51,6 +51,10 @@ int main(int argc, char* argv[])
   VEC prime_factors = {2};
   llong M = 3;
   int index = 0;
+
+  // llong test = compute_modulo(7, 3, 6);
+  // std::cout << "Test modulo: " << test << std::endl;
+  // break_point();
   
   if (M < M_max) {
     L++;
