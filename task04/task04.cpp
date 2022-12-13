@@ -18,13 +18,9 @@ int main(int argc, char* argv[])
   if (argc > 1) {
     file_name = argv[1];
     if (file_name == "-f")
-      file_name = "/home/honzamac/PAL/task04/datapub/pub01.in";
+      file_name = "/home/honzamac/PAL/task04/datapub/pub10.in";
     stdin_input = 0;
   } 
-  else {
-    std::cerr << "Specify the file name (or -f) in argument" << std::endl;
-    return 1;
-  }
     
   llong M_max;
   int D;
