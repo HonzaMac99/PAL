@@ -7,6 +7,7 @@
 #include "print_utils.hpp"
 
 #define llong long long
+#define ullong unsigned long long
 #define VEC std::vector<int>
 
 #define PRINT_INFO 0
@@ -67,6 +68,16 @@ bool is_prime(llong num)
   return true;
 }
 
+//  
+// note: originaly unsigned long changed to signed llong
+llong modulo_multiplication(llong a, llong b, llong m) {
+    llong a_hi = a >> 24, a_lo = a & ((1 << 24) - 1);
+    llong b_hi = b >> 24, b_lo = b & ((1 << 24) - 1);
+    llong result = ((((a_hi*b_hi << 16) % m) << 16) % m) << 16;
+    result += ((a_lo*b_hi+a_hi*b_lo) << 24) + a_lo*b_lo;
+    return result % m;
+}
+
 
 // due to overflowing when doing power of R to llong,
 // another approach is required -> solve it dynamically
@@ -75,14 +86,16 @@ llong compute_modulo(llong M, llong R_power, int R)
   if (R_power == 1)
     return R;
   
-  llong ret;
+  llong ret, a, b;
   if (R_power % 2 != 0) {
-    ret = R;
-    ret *= (llong)powl(compute_modulo(M, (R_power-1)/2, R), 2) % M;
-    ret %= M;
+    a = R;
+    b = compute_modulo(M, (R_power-1)/2, R);
+    b = modulo_multiplication(b, b, M);
+    ret = modulo_multiplication(a, b, M);
   } 
   else {
-    ret = (llong)powl(compute_modulo(M, R_power/2, R), 2) % M;
+    b = compute_modulo(M, R_power/2, R);
+    ret = modulo_multiplication(b, b, M);
   }
 
   return ret;
@@ -99,14 +112,16 @@ void get_prim_root(llong M, VEC prime_factors, int* R_max)
     for(int i = 0; i < int(prime_factors.size()); i++) {
       llong prime_factor = (llong)prime_factors[i];
       llong R_pow = (M-1)/prime_factor;
-      llong modulo;
-      if (R_pow == 1) {
+      llong modulo, a, b;
+			//print_pow(R, R_pow, M);
+
+      if (R_pow == 1) { // only when M=3, R=2
         modulo = R;
       } 
       else if (R_pow % 2 != 0) {
-        modulo = R;   
-        modulo *= compute_modulo(M, R_pow-1, R);
-        modulo %= M;
+        a = R;   
+        b = compute_modulo(M, R_pow-1, R);
+        modulo = modulo_multiplication(a, b, M);
       } 
       else {
         modulo = compute_modulo(M, R_pow, R);
@@ -118,8 +133,6 @@ void get_prim_root(llong M, VEC prime_factors, int* R_max)
       }
     }
   }
-  //std::cout << "M = " << M << ", R = " << R << std::endl;
-  //break_point();
   *R_max = (R > *R_max) ? R : *R_max;
 }
 
