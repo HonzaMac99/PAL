@@ -7,10 +7,10 @@
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define VEC vector<int>
-#define VEC_2D vector<vector<int>>
-
 #define PRINT_INFO 0
+
+typedef std::vector<int> VEC;
+typedef std::vector<vector<int>> VEC_2D;
 
 
 #endif

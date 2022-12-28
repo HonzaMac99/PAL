@@ -4,42 +4,22 @@
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define VEC vector<int>
-#define VEC_2D vector<vector<int>>
-
 #define PRINT 1
 
+typedef std::vector<int> VEC;
+typedef std::vector<vector<int>> VEC_2D;
 
 
-int main(int argc, char* argv[])
+int main()
 {
-  // Read the input from file or stdin
-  std::string file_name;
-  int stdin_input = 1;
-  if (argc > 1) {
-    file_name = argv[1];
-    if (file_name == "-f")
-      file_name = "/home/honzamac/PAL/task05/datapub/pub01.in";
-    stdin_input = 0;
-  }
-    
-  int m_max, d;
-  if (stdin_input) {
-    std::cin >> m_max; 
-    std::cin >> d; 
-  }
-  else {
-    std::ifstream MyReadFile(file_name);
-    std::stringstream ss;
-    std::string fileLine;
-    getline(MyReadFile, fileLine);
-    ss << fileLine;
+  // Do './task05 < ../datapub/pub01.in' for reading files using stdin
+  // Therefore no need for implementing reading from file in the program 
+  int n_states, n_chars;
+  std::cin >> n_states >> n_chars; 
 
-    ss >> m_max; 
-    ss >> d;
-  }
+  std::vector<nfa_state> nf_automaton = get_stdin_data();
 
-  std::cout << "0 0" << std::endl;
+  std::cout << n_states << " " << n_chars << std::endl;
 
   return 0;
 }

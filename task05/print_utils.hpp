@@ -4,10 +4,11 @@
 #include <iostream>
 #include <vector>
 
-#define VEC_2D vector<vector<int>>
-#define VEC_P vector<int>*
-
 using namespace std;
+
+typedef vector<int> VEC;
+typedef vector<int>* VEC_P;
+typedef vector<vector<int>> VEC_2D;
 
 template<class T> 
   void break_point(T input);
