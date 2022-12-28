@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
       file_name = "/home/honzamac/PAL/task04/datapub/pub10.in";
     stdin_input = 0;
   } 
+  // else get the input from stdin
     
   llong M_max;
   int D;
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
   llong L = 0;
   int R_max = 0; 
   VEC primes = get_primes(D);
-  // starting with M = 1 + 2 = 3
+  // starting with M: 1 + 2 = 3
   VEC prime_factors = {2};
   llong M = 3;
   int index = 0;

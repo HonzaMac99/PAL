@@ -30,7 +30,7 @@ void break_point() {
 
 void print_pow(int R, llong R_pow, llong M) {
   if (R > 80) {
-        std::cout << R << " " << R_pow << " " << M << std::endl;
+		std::cout << R << " " << R_pow << " " << M << std::endl;
     break_point();
   }
 }
