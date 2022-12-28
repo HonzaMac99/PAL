@@ -79,7 +79,7 @@ llong modulo_multiplication(llong a, llong b, llong m) {
 }
 
 
-// due to overflowing when doing power of R to llong,
+// due to overflowing when powering R to llong,
 // another approach is required -> solve it dynamically
 llong compute_modulo(llong M, llong R_power, int R)
 {
@@ -134,6 +134,7 @@ void get_prim_root(llong M, VEC prime_factors, int* R_max)
     }
   }
   *R_max = (R > *R_max) ? R : *R_max;
+
 }
 
 
@@ -161,7 +162,6 @@ void get_lehmers(VEC primes, VEC prime_factors, llong M_old, int index,
       }
       if (is_prime(M_new)) {
         (*L)++;
-        // 281251 repeats
         // std::cout << "  M_new=" << M_new << " is a prime" << std::endl;
         get_prim_root(M_new, prime_factors, R_max);
         //std::cout << "  R_max=" << *R_max << std::endl;

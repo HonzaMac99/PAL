@@ -11,7 +11,6 @@ using namespace std;
 template<class T> 
   void break_point(T input);
 void break_point();
-void print_ints(int* ints);
 void print_pow(int R, llong R_pow, llong M);
 
 int break_point_n = 0;
@@ -29,16 +28,11 @@ void break_point() {
   cin >> break_point_arr[break_point_n]; // pauses the programm here 
 }
 
-
 void print_pow(int R, llong R_pow, llong M) {
   if (R > 80) {
 		std::cout << R << " " << R_pow << " " << M << std::endl;
     break_point();
   }
 }
-
-
-
 #endif
-
 
