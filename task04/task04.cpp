@@ -44,15 +44,11 @@ int main(int argc, char* argv[])
   llong L = 0;
   int R_max = 0; 
   VEC primes = get_primes(D);
-  // starting with M: 1 + 2 = 3
+  // starting with M = 1 + 2 = 3
   VEC prime_factors = {2};
   llong M = 3;
   int index = 0;
 
-  // llong test = compute_modulo(7, 3, 6);
-  // std::cout << "Test modulo: " << test << std::endl;
-  // break_point();
-  
   // check if the first combination is ok
   if (M < M_max) {
     L++;

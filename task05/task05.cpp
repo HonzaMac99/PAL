@@ -17,7 +17,11 @@ int main()
   int n_states, n_chars;
   std::cin >> n_states >> n_chars; 
 
-  std::vector<nfa_state> nf_automaton = get_stdin_data();
+  nfa_state* nf_automaton = get_stdin_data(n_states, n_chars);
+
+  std::string input_line; 
+  std::getline(std::cin, input_line);
+  std::cout << input_line << std::endl;
 
   std::cout << n_states << " " << n_chars << std::endl;
 
