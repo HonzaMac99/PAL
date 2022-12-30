@@ -83,8 +83,9 @@ nfa_state* get_stdin_data(int n_states)
       }
     }
 
+#if DATA_INFO
     // Print the dictionary
-    //std::cout << "PRINTING DICT:" << std::endl;
+    std::cout << "PRINTING DICT:" << std::endl;
     std::cout << lex_nfa[i].finite << "  ";
     for (const auto &pair : lex_nfa[i].transitions) {
       std::cout << pair.first << ": ";
@@ -94,6 +95,7 @@ nfa_state* get_stdin_data(int n_states)
       std::cout << "  ";
     }
     std::cout << std::endl;
+#endif
   }
   return lex_nfa;
 }

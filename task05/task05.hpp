@@ -76,7 +76,10 @@ std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet
         int old_str_state = lex_nfa[exp_state].best_str_state;
         int new_str_state = substr_nfa[old_str_state].transitions[new_char][0];
 
-        if (lex_nfa[new_state].best_str == "" or new_str_state > old_str_state) 
+        // update if: 1) no str was assigned, 2) the new str is better, 
+        // 3) the str contains the substr and needs to extend to the finite state
+        if (lex_nfa[new_state].best_str == "" or new_str_state > old_str_state 
+                                              or new_str_state == substr_len) 
         {
           lex_nfa[new_state].best_str = lex_nfa[exp_state].best_str; 
           lex_nfa[new_state].best_str += new_char;
