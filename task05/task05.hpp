@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
+#include <algorithm>
+#include <unistd.h>
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
@@ -11,9 +14,12 @@
 
 //if the new string is better, update the nfa_state and return true if updated
 nfa_state* get_substr_nfa(std::string substring);
+bool insert_word(nfa_state lex_nfa_state, std::string new_word, int new_word_state);
 std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet_len, int substr_len);
 
 
+// note: could use lighter struct than nfa_state, 
+// but for < 10 states it does not make an impact on memory performance
 nfa_state* get_substr_nfa(std::string substring, int alphabet_len) 
 {
   int str_len = substring.length();
@@ -58,43 +64,117 @@ nfa_state* get_substr_nfa(std::string substring, int alphabet_len)
 }
 
 
+// 2) if not in the new state word list, insert the word in lex. order
+// 3) update the best_word state and index values
+bool insert_word(nfa_state* lex_nfa_state, std::string new_word, int new_word_state) {
+  bool inserted = false;
+  bool to_insert = true;
+
+  std::vector<int>::iterator it = lex_nfa_state->word_states.begin();
+  std::vector<std::string>::iterator it_str = lex_nfa_state->words.begin();
+
+  int n_new_st_words = lex_nfa_state->words.size();
+  for(int k = 0; k < n_new_st_words; k++) 
+  {
+    std::string lex_word = lex_nfa_state->words[k];
+    // note: you can use '<' and '>' on strings in c++11, but not in c++20
+    if (new_word.size() > lex_word.size() or 
+        (new_word.size() == lex_word.size() and new_word > lex_word)) 
+      continue;
+
+    if (new_word == lex_word) { 
+      to_insert = false;
+      break;
+    }
+
+    // insert before the first lexgraf. bigger word, 
+    // if the new_word is not in the new_state.words list
+    if (new_word.size() < lex_word.size() or
+        (new_word.size() == lex_word.size() and new_word < lex_word))  
+    {
+      lex_nfa_state->word_states.insert(it+k, new_word_state);
+      lex_nfa_state->words.insert(it_str+k, new_word); 
+
+      if (new_word_state > lex_nfa_state->best_word_state or 
+          (new_word_state == lex_nfa_state->best_word_state and 
+           k < lex_nfa_state->best_word_idx)) 
+      {
+        lex_nfa_state->best_word_state = new_word_state;
+        lex_nfa_state->best_word_idx = k;
+      }
+      inserted = true;
+      to_insert = false;
+      break;
+    }
+  }
+  if (to_insert) {
+    lex_nfa_state->word_states.push_back(new_word_state);
+    lex_nfa_state->words.push_back(new_word); 
+    if (new_word_state > lex_nfa_state->best_word_state) 
+    {
+      lex_nfa_state->best_word_state = new_word_state;
+      lex_nfa_state->best_word_idx = n_new_st_words;
+    }
+    inserted = true;
+  }
+  return inserted;
+}
+
+
 std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet_len, int substr_len) 
 {
   std::string nfa_word;
   int exp_state;
   std::queue<int> states_q;
+  std::set<int> states_set;
   states_q.push(0);
+  states_set.insert(0);
 
   while(not states_q.empty()) {
     exp_state = states_q.front();
     states_q.pop();
+    states_set.erase(exp_state);
+
+    int n_exp_words = lex_nfa[exp_state].words.size();
     for(int i = 0; i < alphabet_len; i++) 
     {
       char new_char = 'a' + i;
       for(const int &new_state : lex_nfa[exp_state].transitions[new_char]) 
       {
-        int old_str_state = lex_nfa[exp_state].best_str_state;
-        int new_str_state = substr_nfa[old_str_state].transitions[new_char][0];
-
-        // update if: 1) no str was assigned, 2) the new str is better, 
-        // 3) the str contains the substr and needs to extend to the finite state
-        if (lex_nfa[new_state].best_str == "" or new_str_state > old_str_state 
-                                              or new_str_state == substr_len) 
+        bool inserted = false; 
+        for(int j = 0; j < n_exp_words; j++) 
         {
-          lex_nfa[new_state].best_str = lex_nfa[exp_state].best_str; 
-          lex_nfa[new_state].best_str += new_char;
-          lex_nfa[new_state].best_str_state = new_str_state;
+          // 1) create new words from the exp_state word list and the new_char
+          int old_word_state = lex_nfa[exp_state].word_states[j];
+          int new_word_state = substr_nfa[old_word_state].transitions[new_char][0];
+          std::string new_word = lex_nfa[exp_state].words[j] + new_char;
 
-          std::cout << "Adding " << lex_nfa[new_state].best_str 
-                    << " to " << new_state 
-                    << " with score " << lex_nfa[new_state].best_str_state 
-                    << std::endl;
-
-          states_q.push(new_state);
-
-          if(lex_nfa[new_state].finite and new_str_state == substr_len) 
-            return lex_nfa[new_state].best_str;
+          // 2) if not in the new state word list, insert them in lex. order
+          // 3) update the best_word state and index values
+          if (insert_word(&lex_nfa[new_state], new_word, new_word_state)) {
+            bool finish = lex_nfa[new_state].finite;
+            // std::cout << "Inserting '" << new_word << "' (" << new_word_state 
+            //           << ") to state " << new_state << " (" << finish << ")"  
+            //           << std::endl;
+            // sleep(1);
+            inserted = true;
+          }
         }
+
+        // using these vars for more clear code
+        int best_st = lex_nfa[new_state].best_word_state;
+        int best_idx = lex_nfa[new_state].best_word_idx;
+
+        if (inserted) {
+          int in_queue = states_set.count(new_state); 
+          if (not in_queue) { 
+            states_q.push(new_state);
+            states_set.insert(new_state);
+          }
+        }
+
+        if (lex_nfa[new_state].finite and best_st == substr_len) 
+          return lex_nfa[new_state].words[best_idx];
       }
     }
   }
