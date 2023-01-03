@@ -86,20 +86,11 @@ std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet
   std::string nfa_word;
   int exp_state;
   std::queue<int> states_q;
-  std::set<int> states_set;
   states_q.push(0);
-  states_set.insert(0);
 
   while(not states_q.empty()) {
     exp_state = states_q.front();
     states_q.pop();
-    states_set.erase(exp_state);
-
-    if (not lex_nfa[exp_state].changed) {
-      continue;
-    } else {
-      lex_nfa[exp_state].changed = false;
-    }
 
     for(int i = 0; i < alphabet_len; i++) 
     {
@@ -114,21 +105,18 @@ std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet
           std::string new_word = lex_nfa[exp_state].words[j] + new_char;
           
           if (update_word(&lex_nfa[new_state], new_word, new_word_state)) {
+#if PRINT_INFO
             std::cout << "Updating '" << new_word << "' (" << new_word_state 
                       << ") from state " << exp_state 
                       << " to state " << new_state << " (" 
                       << lex_nfa[new_state].finite << ")" << std::endl;
-            //sleep(1);
-            //if (not states_set.count(new_state))
+            //sleep(1)
+#endif
             states_q.push(new_state);
-            lex_nfa[new_state].changed = true;
           }
         }
 
         if (lex_nfa[new_state].finite and lex_nfa[new_state].words[end_state] != "") {
-          //std::cout << lex_nfa[exp_state].words[end_state] << std::endl;
-          //std::cout << lex_nfa[new_state].words[end_state] << std::endl;
-          //std::cout << lex_nfa[exp_state].transitions['a'][0] << std::endl;
           return lex_nfa[new_state].words[end_state];
         }
       }

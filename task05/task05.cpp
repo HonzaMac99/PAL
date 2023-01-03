@@ -3,7 +3,7 @@
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define PRINT 1
+#define PRINT 0
 
 typedef std::vector<int> VEC;
 typedef std::vector<vector<int>> VEC_2D;
@@ -17,11 +17,14 @@ int main()
   std::cin >> n_states >> alphabet_len; 
 
   nfa_state* lex_nfa = get_stdin_data(n_states);
+
+#if PRINT
   for (int i = 0; i < n_states; i++) {
     if (lex_nfa[i].finite) 
       std::cout << i << " ";
   }
   std::cout << std::endl;
+#endif
 
   std::string substring; 
   std::getline(std::cin, substring);

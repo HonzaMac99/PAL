@@ -14,7 +14,6 @@ struct nfa_st
 
   std::vector<std::string> words = {"", "", "", "", "",
                                     "", "", "", "", "", ""};
-  bool changed = true;
 }; 
 
 typedef struct nfa_st nfa_state;
