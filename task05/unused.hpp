@@ -22,16 +22,18 @@ bool has_substring_on_end(std::string main_str, std::string sub_str) {
   return true;
 }
 
-// std::cout << "TESTING" << std::endl;
-// std::vector<int> vec;
-// std::string substring2 = "abcabdabcd"; 
-// nfa_state* substr_nfa = get_substr_nfa(substring2, 4);
-// vec = substr_nfa[0].transitions['a'];
-// std::cout << "0 a " << vec.front() << std::endl;
-// vec = substr_nfa[5].transitions['c'];
-// std::cout << "5 c " << vec.front() << std::endl;
-// vec = substr_nfa[8].transitions['d'];
-// std::cout << "8 d " << vec.front() << std::endl;
+  // std::vector<int> vec;
+  // std::string substring2 = "edcbcdbcbc"; 
+  // nfa_state* substr_nfa = get_substr_nfa(substring2, 5);
+
+  // int exp_state;
+  // char new_char;
+  // std::cout << "TESTING " << substring2 << std::endl;
+  // while(true) {
+  //   std::cin >> exp_state >> new_char;
+  //   vec = substr_nfa[exp_state].transitions[new_char];
+  //   std::cout << exp_state << " + " << new_char << " -> " << vec.front() << std::endl;
+  // }
 
 
 // old function which stores only the string with its best state 
@@ -79,4 +81,33 @@ std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet
   }
   std::cerr << "No string found!" << std::endl;
   return "";
+}
+
+
+// inserting into a vector
+#include <iostream>
+#include <vector>
+
+int main ()
+{
+  std::vector<std::string> myvector = {"", "aa", "aaa", "caaaaaaaaaa", "bl", "ble", "blossom"};
+  std::vector<std::string>::iterator it = myvector.begin();
+  std::string new_str = "aaaaa";
+  std::cout << "Size: " << new_str.size() << std::endl;
+  int vec_size = myvector.size();
+  for(int i = 0; i < vec_size; i++) {
+    if(new_str < myvector[i]) 
+    {
+      myvector.insert(it+i, new_str);
+      break;
+    }
+  }
+  myvector.push_back(new_str);
+  
+  std::cout << "myvector contains: ";
+  for (int i = 0; i < myvector.size(); i++)
+    std::cout << myvector[i] << ", ";
+  std::cout << '\n';
+
+  return 0;
 }

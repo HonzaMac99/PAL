@@ -5,17 +5,16 @@
 #include <map>
 #include "print_utils.hpp"
 
-#define DATA_INFO 0
+#define DATA_INFO 0 
 
 struct nfa_st
 {
   bool finite = false;
   map<char, vector<int>> transitions;
 
-  std::vector<std::string> words = {};
-  std::vector<int> word_states = {}; 
-  int best_word_idx = 0;
-  int best_word_state = 0;
+  std::vector<std::string> words = {"", "", "", "", "",
+                                    "", "", "", "", "", ""};
+  bool changed = true;
 }; 
 
 typedef struct nfa_st nfa_state;
@@ -29,10 +28,6 @@ nfa_state* get_stdin_data(int n_states)
   nfa_state* lex_nfa = new nfa_state[n_states];
   std::string input_line; 
   std::getline(std::cin, input_line);
-
-  //set initial values for starting (0) state:
-  lex_nfa[0].words.push_back("");
-  lex_nfa[0].word_states.push_back(0);
   
   for(int i = 0; i < n_states; i++) {
 

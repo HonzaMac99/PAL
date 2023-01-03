@@ -26,12 +26,14 @@ add_test(NAME Runs COMMAND task05 -f)
 foreach(i RANGE 1 9) 
   #message(STATUS "I=${i}")
   file(READ "./datapub/pub0${i}.out" outStringRef)
+  do_test(task05 "< ../datapub/pub0${i}.in" ${outStringRef}) 
   #do_test(task05 "../datapub/pub0${i}.in" ${outStringRef}) 
-  do_test(task05 "../datapub/pub0${i}.in" "0 0") 
+  #do_test(task05 "../datapub/pub0${i}.in" "0 0") 
 endforeach()
 
 file(READ "./datapub/pub10.out" outStringRef)
+do_test(task05 "< ../datapub/pub10.in" ${outStringRef}) 
 #do_test(task05 "../datapub/pub10.in" ${outStringRef}) 
-do_test(task05 "../datapub/pub10.in" "0 0") 
+#do_test(task05 "../datapub/pub10.in" "0 0") 
 
 
