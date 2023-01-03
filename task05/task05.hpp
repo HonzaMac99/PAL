@@ -3,9 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <set>
 #include <queue>
-#include <algorithm>
 #include <unistd.h>
 #include "data_utils.hpp"
 #include "print_utils.hpp"
@@ -83,8 +81,9 @@ bool update_word(nfa_state* lex_nfa_state, std::string new_word, int new_word_st
 std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet_len, int substr_len) 
 {
   int end_state = substr_len;
-  std::string nfa_word;
+  int starting = true;
   int exp_state;
+  std::string nfa_word;
   std::queue<int> states_q;
   states_q.push(0);
 
@@ -99,7 +98,9 @@ std::string get_nfa_word(nfa_state* lex_nfa, nfa_state* substr_nfa, int alphabet
       {
         for(int j = 0; j <= end_state; j++) 
         {
-          if (lex_nfa[exp_state].words[j] == "" and not (j == 0 and exp_state == 0)) 
+          if (starting) 
+            starting = false;
+          else if (lex_nfa[exp_state].words[j] == "") 
             continue;
           int new_word_state = substr_nfa[j].transitions[new_char][0];
           std::string new_word = lex_nfa[exp_state].words[j] + new_char;
