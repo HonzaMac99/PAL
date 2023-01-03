@@ -23,16 +23,15 @@ bool has_substring_on_end(std::string main_str, std::string sub_str) {
 }
 
   // std::vector<int> vec;
-  // std::string substring2 = "edcbcdbcbc"; 
+  // std::string substring2 = "ccdcddcc"; 
   // nfa_state* substr_nfa = get_substr_nfa(substring2, 5);
 
-  // int exp_state;
-  // char new_char;
   // std::cout << "TESTING " << substring2 << std::endl;
-  // while(true) {
-  //   std::cin >> exp_state >> new_char;
-  //   vec = substr_nfa[exp_state].transitions[new_char];
-  //   std::cout << exp_state << " + " << new_char << " -> " << vec.front() << std::endl;
+  // for(int i = 0; i <= substring2.size(); i++) {
+  //   for(int j = 0; j < 5; j++) {
+  //     std::cout << substr_nfa[i].transitions[('a' + j)].front() << " "; 
+  //   }
+  //   std::cout << std::endl;
   // }
 
 

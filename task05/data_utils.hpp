@@ -16,7 +16,15 @@ struct nfa_st
                                     "", "", "", "", "", ""};
 }; 
 
+struct st_info 
+{
+  int id = 0;
+  std::string w = "";
+  int w_state = 0;
+};  
+
 typedef struct nfa_st nfa_state;
+typedef struct st_info state_info;
 
 nfa_state* get_stdin_data(int n_states);
 
