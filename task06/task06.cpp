@@ -1,45 +1,38 @@
 #include <iostream>
-#include <algorithm>
 #include "task06.hpp"
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define VEC vector<int>
-#define VEC_2D vector<vector<int>>
+#define PRINT 0
 
-#define PRINT 1
+typedef std::vector<int> VEC;
+typedef std::vector<vector<int>> VEC_2D;
 
 
-
-int main(int argc, char* argv[])
+int main()
 {
-  // Read the input from file or stdin
-  std::string file_name;
-  int stdin_input = 1;
-  if (argc > 1) {
-    file_name = argv[1];
-    if (file_name == "-f")
-      file_name = "/home/honzamac/PAL/task05/datapub/pub01.in";
-    stdin_input = 0;
-  }
-    
-  int m_max, d;
-  if (stdin_input) {
-    std::cin >> m_max; 
-    std::cin >> d; 
-  }
-  else {
-    std::ifstream MyReadFile(file_name);
-    std::stringstream ss;
-    std::string fileLine;
-    getline(MyReadFile, fileLine);
-    ss << fileLine;
+  // Do './task06 < ../datapub/pub01.in' for reading files using stdin
+  // No need for implementing reading from file in the program 
+  
+  int n_rows, n_cols, f_chain_len, n_clips, clip_factor, rplc_factor;
+  std::cin >> n_rows >> n_cols >> f_chain_len >> n_clips >> clip_factor >> rplc_factor;
 
-    ss >> m_max; 
-    ss >> d;
-  }
+  //nfa_state* lex_nfa = get_stdin_data(n_states);
+  VEC_2D prod_matrix = get_prod_matrix(n_rows, n_cols);
 
-  std::cout << "0 0" << std::endl;
+  std::string f_chain;
+  std::cin >> f_chain; 
+
+  VEC_2D clip_schemes = get_clip_schemes(n_clips);
+
+  std::string substring; 
+  std::getline(std::cin, substring);
+  nfa_state* substr_nfa = get_substr_nfa(substring, alphabet_len);
+
+  int substr_len = substring.length();
+  std::string nfa_word = get_nfa_word(lex_nfa, substr_nfa, alphabet_len, substr_len);
+
+  std::cout << nfa_word << std::endl;
 
   return 0;
 }

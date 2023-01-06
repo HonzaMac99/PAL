@@ -3,12 +3,11 @@
 
 #include <iostream>
 #include <vector>
-#include <queue>
 #include "data_utils.hpp"
 #include "print_utils.hpp"
 
-#define VEC vector<int>
-#define VEC_2D vector<vector<int>>
+typedef std::vector<int> VEC;
+typedef std::vector<vector<int>> VEC_2D;
 
 #define PRINT_INFO 0
 
