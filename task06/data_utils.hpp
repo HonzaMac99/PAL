@@ -73,6 +73,7 @@ VEC_2D get_clip_schemes(int n_clips) {
     clip_schemes.push_back(clip_scheme);
     std::cout << std::endl;
   }
+  std::cout << std::endl;
   return clip_schemes;
 }
 #endif

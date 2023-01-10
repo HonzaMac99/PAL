@@ -9,39 +9,52 @@
 typedef std::vector<int> VEC;
 typedef std::vector<vector<int>> VEC_2D;
 
-int compute_chain_len(int n_rows, int n_cols);
+VEC generate_base_chain(VEC_2D prod_matrix, int n_rows, int n_cols);
+void gen_base_chain(VEC_2D prod_matrix, int n_rows, int n_cols,
+            VEC* base_chain, VEC new_chain, int row_id, int col_id);
 
 
-int compute_chain_len(int n_rows, int n_cols) {
-  if(n_rows == 1)
-    return n_cols;
+VEC operator + (const VEC a, const VEC b) {
+    VEC c = a;
+    c.insert(c.end(), b.begin(), b.end());
+    return c;
+}
 
-  int chain_len = 0;
-  std::vector<int> n_paths(n_cols, 1);
-  std::vector<int> new_n_paths(n_cols);
 
-  std::cout << std::endl;
-  for(int i = 0; i < n_rows-1; i++) {
-    for(int j = 0; j < n_cols; j++) {
-      if(j == 0) 
-        new_n_paths[j] = n_paths[j] + n_paths[j+1];
-      else if(j == n_cols-1)
-        new_n_paths[j] = n_paths[j-1] + n_paths[j];
-      else
-        new_n_paths[j] = n_paths[j-1] + n_paths[j] + n_paths[j+1];
-    }
-    n_paths = new_n_paths;
 
-    for(int j = 0; j < n_cols; j++) {
-      std::cout << new_n_paths[j] << " ";
-    }
-    std::cout << std::endl;
+void gen_base_chain(VEC_2D prod_matrix, int n_rows, int n_cols,
+            VEC* base_chain, VEC new_chain, int row_id, int col_id) 
+{
+  new_chain.push_back(prod_matrix[row_id][col_id]);
+
+  if (row_id == n_rows-1) {
+    *base_chain = *base_chain + new_chain;
+    return;
   }
-  
-  for(int &element : n_paths)
-    chain_len += element;
-  chain_len *= n_rows;
-  return chain_len;
+
+  if (col_id == 0) { 
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id);
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id+1);
+  }
+  else if (col_id == n_cols-1) {
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id-1);
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id);
+  }
+  else {
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id-1);
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id);
+    gen_base_chain(prod_matrix, n_rows, n_cols, base_chain, new_chain, row_id+1, col_id+1);
+  }
+}
+
+
+VEC generate_base_chain(VEC_2D prod_matrix, int n_rows, int n_cols) {
+
+  VEC base_chain, new_chain;
+  for(int col_id = 0; col_id < n_cols; col_id++) {
+    gen_base_chain(prod_matrix, n_rows, n_cols, &base_chain, new_chain, 0, col_id); 
+  }
+  return base_chain;
 }
 
 #define PRINT_INFO 0
