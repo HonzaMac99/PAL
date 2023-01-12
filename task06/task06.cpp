@@ -8,7 +8,6 @@
 typedef std::vector<int> VEC;
 typedef std::vector<vector<int>> VEC_2D;
 
-
 int main()
 {
   // Do './task06 < ../datapub/pub01.in' for reading files using stdin
@@ -23,13 +22,23 @@ int main()
   VEC_2D clip_schemes = get_clip_schemes(n_clips);
 
   VEC base_chain = generate_base_chain(prod_matrix, n_rows, n_cols);
-  int chain_len = base_chain.size(); 
+  
+  std::cout << "b_chain_len: " << base_chain.size() 
+            << " d_chain_len: " << desr_chain.size() << std::endl;
+  std::vector<tree_node> clip_tree = get_clip_tree(clip_schemes);
+#if PRINT
+  print_clip_tree(clip_tree);
+#endif
 
-  //for(int i = 0; i < base_chain.size(); i++) {
-  //  std::cout << base_chain[i] << " ";
-  //}
-  //std::cout << std::endl << std::endl;;
+  int start_pos, end_pos, cost;
 
+  find_best_chain(base_chain, desr_chain, clip_tree, 
+                clip_factor, replace_factor,
+                &start_pos, &end_pos, &cost);
+
+  int b_ch_len = end_pos - start_pos + 1; 
+  
+  std::cout << start_pos << " " << b_ch_len << " " << cost << std::endl;
 
   return 0;
 }

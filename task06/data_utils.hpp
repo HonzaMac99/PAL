@@ -4,7 +4,7 @@
 #include <iostream>
 #include "print_utils.hpp"
 
-#define DATA_INFO 1 
+#define DATA_INFO 0 
 
 typedef std::vector<int> VEC;
 typedef std::vector<vector<int>> VEC_2D;
@@ -68,12 +68,18 @@ VEC_2D get_clip_schemes(int n_clips) {
       new_link = clip_scheme_str[j];
       new_link_len = new_link - 'a' + 1; 
       clip_scheme.push_back(new_link_len);
+#if DATA_INFO
       std::cout << new_link_len << " ";
+#endif
     }
     clip_schemes.push_back(clip_scheme);
+#if DATA_INFO
     std::cout << std::endl;
+#endif
   }
+#if DATA_INFO
   std::cout << std::endl;
+#endif
   return clip_schemes;
 }
 #endif
